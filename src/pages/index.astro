@@ -164,7 +164,7 @@ const CODE_THEME = await loadCodeTheme();
 
 const title = "MewUI";
 const description =
-  "A cross-platform, lightweight, code-first .NET GUI framework for NativeAOT and trim friendly desktop apps.";
+  "A cross-platform, code-first .NET GUI framework. Desktop apps publish as a single native executable of a few megabytes, with no .NET runtime to install.";
 ---
 
 <Base title={title} description={description}>
@@ -172,8 +172,9 @@ const description =
     <img class="wordmark" src={asset("logo_h-1280.webp")} alt="MewUI" width="420" height="184" />
     <h1>Desktop apps in C#, shipped as one small native file.</h1>
     <p class="lede">
-      MewUI is a cross-platform, lightweight, code-first .NET GUI framework.
-      No XAML, no designer, no .NET runtime on the target machine.
+      A cross-platform, code-first .NET GUI framework. Apps publish as a single
+      native executable of a few megabytes and run with no .NET runtime installed.
+      No XAML, no designer.
     </p>
     <div class="actions">
       <a class="primary" href={links.gallery}>Run the demo in your browser</a>
