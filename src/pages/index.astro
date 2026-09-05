@@ -23,10 +23,6 @@ const galleryRows = upstream.sizes.entries.filter(
 const smallestHello = helloRows.reduce((a, b) =>
   a.executableBytes <= b.executableBytes ? a : b,
 );
-const measuredOn = new Date(upstream.sizes.generatedAtUtc)
-  .toISOString()
-  .slice(0, 10);
-
 const targets = [
   { icon: "windows", name: "Windows", detail: "10 and later" },
   { icon: "linux", name: "Linux", detail: "X11" },
@@ -254,10 +250,7 @@ const description =
         project, no SDK template. Requires the .NET 10 SDK.
       </p>
       <p class="small muted">
-        This downloads and executes code from GitHub. Read
-        <a href={`${links.repo}/blob/main/samples/FBASample/fba_gallery.cs`}>the file</a>
-        first if that matters to you. Prefer not to run anything?
-        <a href={links.gallery}>The same Gallery runs in your browser.</a>
+        This downloads and executes code from GitHub.
       </p>
     </div>
     <CopyCommand command={upstream.tryCommand} />
@@ -297,10 +290,6 @@ const description =
           <p>Gallery, the full control showcase</p>
         </div>
       </div>
-      <p class="small muted">
-        Measured on {upstream.sizes.measuredOnVersion} at {measuredOn}.
-        <a href={links.sizeTools}>Reproduce it with the size tools.</a>
-      </p>
     </div>
     <div class="table-scroll">
       <table>
@@ -337,9 +326,6 @@ const description =
         every example on this page is compiled against the published package
         before the site deploys.
       </p>
-      <a class="text-link" href={`${links.repo}/blob/main/docs/CSharpMarkup.md`}>
-        Read the markup guide
-      </a>
     </div>
     <div class="code-card">
       <Code code={helloCode} lang="csharp" theme={CODE_THEME} />
@@ -354,9 +340,6 @@ const description =
         model, or another element's property. Dotted paths are decomposed into
         per step subscriptions at compile time, so trimming and AOT keep working.
       </p>
-      <a class="text-link" href={`${links.repo}/blob/main/docs/Binding.md`}>
-        Read the binding guide
-      </a>
     </div>
     <div class="code-card">
       <Code code={bindingCode} lang="csharp" theme={CODE_THEME} />
@@ -441,7 +424,6 @@ const description =
         Windowing runs through a platform host, drawing through a backend. Pick
         one backend at publish time to trim the rest away.
       </p>
-      <a class="text-link" href={links.install}>Installation and packages</a>
     </div>
     <div class="table-scroll">
       <table>
@@ -486,10 +468,7 @@ const description =
         <a href={`${links.repo}/blob/main/docs/${file}`}>{label}</a>
       ))}
     </div>
-    <p class="small muted">
-      <a href={links.docs}>All documentation</a> is also available in Korean as
-      the matching <code>.ko.md</code> files.
-    </p>
+    <p class="small muted">Every page also exists in Korean as a .ko.md file.</p>
   </section>
 </Base>
 
