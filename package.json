@@ -9,7 +9,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "prebuild": "node scripts/fetch-upstream.mjs",
+    "predev": "node scripts/fetch-upstream.mjs"
   },
   "dependencies": {
     "astro": "^7.3.1"
