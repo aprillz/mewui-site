@@ -34,8 +34,7 @@ const { title, description } = Astro.props;
   <body>
     <header class="site-header">
       <a class="brand" href={base === "" ? "/" : `${base}/`}>
-        <img src={asset("logo.svg")} alt="" width="36" height="36" />
-        <span>MewUI</span>
+        <img src={asset("logo_h-480.png")} alt="MewUI" width="480" height="135" />
       </a>
       <nav>
         <a href={links.docs}>Docs</a>
@@ -191,13 +190,12 @@ const { title, description } = Astro.props;
   .brand {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    color: inherit;
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 1.15rem;
-    letter-spacing: -0.02em;
-    text-decoration: none;
+    line-height: 0;
+  }
+
+  .brand img {
+    width: auto;
+    height: 2.1rem;
   }
 
   .site-header nav {
