@@ -531,6 +531,9 @@ const description =
   .frame {
     --pos: 50%;
     position: relative;
+    /* The captures are portrait and would tower over the hero, so the frame
+       shows the top half and crops the rest. */
+    aspect-ratio: 1619 / 952;
     border: 1px solid var(--line);
     border-radius: var(--radius);
     overflow: hidden;
@@ -546,7 +549,10 @@ const description =
 
   .frame .over {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
     clip-path: inset(0 0 0 var(--pos));
   }
 
