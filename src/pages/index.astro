@@ -8,8 +8,9 @@ import { links, asset } from "../config";
 import { snippet } from "../lib/snippet";
 import { loadCodeTheme } from "../lib/codeTheme";
 
-const MIB = 1024 * 1024;
-const mib = (bytes: number) => (bytes / MIB).toFixed(2);
+// Binary megabytes, matching how the repository reports publish sizes.
+const MEGABYTE = 1024 * 1024;
+const mb = (bytes: number) => (bytes / MEGABYTE).toFixed(2);
 const compact = (value: number) =>
   value >= 1000 ? `${(value / 1000).toFixed(1)}K` : String(value);
 
@@ -42,7 +43,7 @@ const highlights = [
   {
     icon: "feather",
     title: "Small by design",
-    body: `A Hello World window publishes at ${mib(smallestHello.executableBytes)} MiB. Low memory footprint and fast first frame follow from the same choices.`,
+    body: `A Hello World window publishes at ${mb(smallestHello.executableBytes)} MB. Low memory footprint and fast first frame follow from the same choices.`,
   },
   {
     icon: "brackets",
@@ -288,11 +289,11 @@ const description =
       </p>
       <div class="size-headline">
         <div>
-          <strong>{mib(smallestHello.executableBytes)}<span> MiB</span></strong>
+          <strong>{mb(smallestHello.executableBytes)}<span> MB</span></strong>
           <p>Hello World, {smallestHello.platformBackend}</p>
         </div>
         <div>
-          <strong>{mib(galleryRows[0].executableBytes)}<span> MiB</span></strong>
+          <strong>{mb(galleryRows[0].executableBytes)}<span> MB</span></strong>
           <p>Gallery, the full control showcase</p>
         </div>
       </div>
@@ -318,8 +319,8 @@ const description =
             return (
               <tr>
                 <td>{hello.platformBackend}</td>
-                <td>{mib(hello.executableBytes)} MiB</td>
-                <td>{gallery ? `${mib(gallery.executableBytes)} MiB` : "-"}</td>
+                <td>{mb(hello.executableBytes)} MB</td>
+                <td>{gallery ? `${mb(gallery.executableBytes)} MB` : "-"}</td>
               </tr>
             );
           })}
