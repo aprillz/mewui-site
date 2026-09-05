@@ -271,18 +271,54 @@ const description =
     </figure>
   </section>
 
-  <section id="try" class="split">
-    <div>
-      <h2>Try it before you install anything</h2>
-      <p class="lede">
-        One command downloads a single file sample and runs it. No clone, no
-        project, no SDK template. Requires the .NET 10 SDK.
-      </p>
-      <p class="small muted">
-        This downloads and executes code from GitHub.
-      </p>
-    </div>
-    <CopyCommand command={upstream.tryCommand} />
+  <section id="try">
+    <h2>Try it before you install anything</h2>
+    <p class="lede">
+      Three ways in, ordered by what they ask of you.
+    </p>
+    <ol class="ladder">
+      <li>
+        <div class="rung">
+          <span class="step">1</span>
+          <div>
+            <h3>In your browser</h3>
+            <p class="muted">
+              Nothing to install. The Gallery sample is the same code compiled
+              to WebAssembly.
+            </p>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="primary" href={links.gallery}>Open the Gallery</a>
+        </div>
+      </li>
+      <li>
+        <div class="rung">
+          <span class="step">2</span>
+          <div>
+            <h3>One command</h3>
+            <p class="muted">
+              Needs the .NET 10 SDK, nothing else. No clone, no project, no
+              template. This downloads and runs code from GitHub.
+            </p>
+          </div>
+        </div>
+        <CopyCommand command={upstream.tryCommand} />
+      </li>
+      <li>
+        <div class="rung">
+          <span class="step">3</span>
+          <div>
+            <h3>In your own project</h3>
+            <p class="muted">
+              One metapackage brings the core, the platform hosts and the
+              rendering backends.
+            </p>
+          </div>
+        </div>
+        <CopyCommand command="dotnet add package Aprillz.MewUI" />
+      </li>
+    </ol>
   </section>
 
   <section id="why">
@@ -840,6 +876,54 @@ const description =
     color: var(--accent);
   }
 
+  .ladder {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .ladder li {
+    display: grid;
+    gap: 1.25rem;
+    align-items: center;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    padding: 1.4rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--bg-soft);
+  }
+
+  .rung {
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+  }
+
+  .step {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 650;
+  }
+
+  .rung h3 {
+    margin: 0 0 0.3rem;
+    font-size: 1.05rem;
+  }
+
+  .rung p {
+    margin: 0;
+    font-size: 0.93rem;
+  }
+
   .cards {
     display: grid;
     gap: 1rem;
@@ -1051,6 +1135,11 @@ const description =
   }
 
   @media (max-width: 60rem) {
+    .ladder li {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1rem;
+    }
+
     .split {
       /* Plain 1fr resolves to minmax(auto, 1fr), so a wide code block or
          command would widen the column rather than scroll inside it. */
