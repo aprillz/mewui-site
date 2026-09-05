@@ -44,8 +44,12 @@ const { command } = Astro.props;
 
   pre {
     margin: 0;
-    flex: 1;
+    /* A flex item defaults to min-width:auto, which lets the command push the
+       box wider instead of scrolling inside it. */
+    flex: 1 1 0;
+    min-width: 0;
     overflow-x: auto;
+    overscroll-behavior-x: contain;
     color: var(--code-fg);
     font-size: 0.9rem;
     line-height: 2.2;

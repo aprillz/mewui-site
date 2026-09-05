@@ -1028,7 +1028,9 @@ const description =
 
   @media (max-width: 60rem) {
     .split {
-      grid-template-columns: 1fr;
+      /* Plain 1fr resolves to minmax(auto, 1fr), so a wide code block or
+         command would widen the column rather than scroll inside it. */
+      grid-template-columns: minmax(0, 1fr);
       gap: 2rem;
     }
 
