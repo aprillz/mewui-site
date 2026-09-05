@@ -8,7 +8,7 @@ const REMAP: Record<string, string> = {
   "#C586C0": "#93C763", // control keywords
   "#4EC9B0": "#4EC9B0", // types
   "#DCDCAA": "#DCDCAA", // methods
-  "#9CDCFE": "#70B9E3", // parameters and properties
+  "#9CDCFE": "#D9D9D9", // identifiers: locals, parameters, members
   "#4FC1FF": "#70B9E3", // constant locals
   "#CE9178": "#EC7600", // strings
   "#D16969": "#EC7600", // regex literals
@@ -17,6 +17,7 @@ const REMAP: Record<string, string> = {
   "#D4D4D4": "#F1F2F3", // plain text
 };
 
+const TYPE = "#4EC9B0";
 const FOREGROUND = "#F1F2F3";
 const BACKGROUND = "#1E1E1E";
 
@@ -30,7 +31,7 @@ export async function loadCodeTheme() {
   const theme = structuredClone(source) as typeof source & {
     name: string;
     colors?: Record<string, string>;
-    tokenColors?: { settings?: { foreground?: string } }[];
+    tokenColors?: { scope?: string | string[]; settings?: { foreground?: string } }[];
   };
 
   theme.name = "mewui-editor";
@@ -40,6 +41,14 @@ export async function loadCodeTheme() {
       token.settings!.foreground = remap(foreground);
     }
   }
+
+  // The C# grammar has no semantic model, so a static class in a member access
+  // (Math.Clamp, Application.Shutdown) lands on variable.other.object rather
+  // than a type scope. Appended rules win, so this puts it back on the type color.
+  theme.tokenColors?.push({
+    scope: ["variable.other.object.cs"],
+    settings: { foreground: TYPE },
+  });
 
   theme.colors ??= {};
   theme.colors["editor.foreground"] = FOREGROUND;
