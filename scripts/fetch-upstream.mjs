@@ -87,6 +87,31 @@ const tryCommand = requireMatch(
   "the try-it-out one liner",
 );
 
+function namesBetween(text, startMarker, endMarker, what) {
+  const start = text.indexOf(startMarker);
+  const end = text.indexOf(endMarker, start + startMarker.length);
+  if (start < 0 || end < 0) {
+    throw new Error(`Could not find the ${what} list upstream.`);
+  }
+  // Parenthesised asides carry things like `Auto` that are not control names.
+  const block = text.slice(start, end).replace(/\([^)]*\)/g, "");
+  const names = [...block.matchAll(/`([A-Z][A-Za-z0-9]*)`/g)].map(
+    (match) => match[1],
+  );
+  if (names.length === 0) {
+    throw new Error(`The ${what} list upstream is empty.`);
+  }
+  return [...new Set(names)];
+}
+
+const controls = namesBetween(
+  readme,
+  "Controls (Implemented):",
+  "Panels:",
+  "controls",
+);
+const panels = namesBetween(readme, "Panels:", "> All panels", "panels");
+
 const nuget = await get(NUGET_INDEX, "json");
 const stable = nuget.versions.filter((version) => !version.includes("-"));
 const publishedVersion = stable[stable.length - 1];
@@ -115,6 +140,8 @@ const upstream = {
   publishedVersion,
   targetFrameworks: targetFrameworks.split(";"),
   tryCommand,
+  controls,
+  panels,
   stats: {
     stars: repo.stargazers_count,
     forks: repo.forks_count,

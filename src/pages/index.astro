@@ -56,29 +56,6 @@ const highlights = [
   },
 ] as const;
 
-const workflow = [
-  {
-    icon: "download",
-    title: "Install",
-    body: "Add the package, or drop a single .cs file with a package header and run it.",
-  },
-  {
-    icon: "pen",
-    title: "Write",
-    body: "Compose controls with fluent C# markup and bind them to plain view models.",
-  },
-  {
-    icon: "refresh",
-    title: "Iterate",
-    body: "Hot Reload applies edits to the running app, Editor Preview renders it in the IDE, DevTools inspects the live tree.",
-  },
-  {
-    icon: "ship",
-    title: "Publish",
-    body: "Publish NativeAOT per platform, pick one rendering backend to trim the rest away.",
-  },
-] as const;
-
 const extensions = [
   {
     icon: "dock",
@@ -117,6 +94,36 @@ const platforms = [
   { platform: "Linux", host: "X11", backends: "MewVG (OpenGL)" },
   { platform: "macOS 12+", host: "AppKit", backends: "MewVG (Metal)" },
   { platform: "Browser", host: "WebAssembly", backends: "MewVG (WebGL2)" },
+];
+
+// Categories are ours, the names come from the README (5.1 in the plan), so a
+// control added upstream shows up here and a removed one disappears.
+const CONTROL_GROUPS: [string, string[]][] = [
+  ["Buttons", ["Button", "ToggleButton", "RepeatButton", "SplitButton", "DropDownButton"]],
+  ["Text", ["Label", "TextBlock", "TextBox", "MultiLineTextBox", "PasswordBox", "SyntaxViewer"]],
+  ["Selection", ["CheckBox", "RadioButton", "ToggleSwitch", "ComboBox", "ListBox"]],
+  ["Data", ["TreeView", "GridView"]],
+  ["Values", ["Slider", "ProgressBar", "ProgressRing", "NumericUpDown", "ColorPicker", "DatePicker", "Calendar"]],
+  ["Containers", ["TabControl", "GroupBox", "Expander", "Border", "ScrollViewer", "NavigationView"]],
+  ["Menus and bars", ["MenuBar", "ContextMenu", "ToolTip", "ToolBar"]],
+  ["Media", ["Image"]],
+  ["App", ["Window", "DispatcherTimer"]],
+];
+
+const known = new Set(CONTROL_GROUPS.flatMap(([, members]) => members));
+const uncategorised = upstream.controls.filter((name) => !known.has(name));
+const controlGroups: [string, string[]][] = [
+  ...CONTROL_GROUPS.map(
+    ([label, members]) =>
+      [label, members.filter((name) => upstream.controls.includes(name))] as [
+        string,
+        string[],
+      ],
+  ).filter(([, members]) => members.length > 0),
+  ...(uncategorised.length > 0
+    ? ([["More", uncategorised]] as [string, string[]][])
+    : []),
+  ["Panels", upstream.panels],
 ];
 
 const agentPoints = [
@@ -355,19 +362,6 @@ const description =
     </div>
   </section>
 
-  <section id="workflow">
-    <h2>How you work</h2>
-    <ol class="steps">
-      {workflow.map((item, index) => (
-        <li>
-          <span class="badge"><Icon name={item.icon} /></span>
-          <h3><span class="step-index">{index + 1}</span>{item.title}</h3>
-          <p class="muted">{item.body}</p>
-        </li>
-      ))}
-    </ol>
-  </section>
-
   <section id="ai" class="split">
     <div>
       <h2>Built to be driven by coding agents</h2>
@@ -400,6 +394,22 @@ const description =
       navigation, and the panels to lay them out. The Gallery sample exercises
       all of them, and it runs in the browser with no install.
     </p>
+    <div class="table-scroll control-table">
+      <table>
+        <tbody>
+          {controlGroups.map(([label, members]) => (
+            <tr>
+              <th scope="row">{label}</th>
+              <td>
+                {members.map((name) => (
+                  <code>{name}</code>
+                ))}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
     <div class="actions">
       <a class="primary" href={links.gallery}>Open the Gallery</a>
       <a href={`${links.repo}/tree/main/samples`}>Browse the samples</a>
@@ -519,7 +529,7 @@ const description =
   }
 
   .wordmark {
-    width: min(19rem, 70%);
+    width: min(26rem, 84%);
     height: auto;
     margin-bottom: 1.5rem;
   }
@@ -927,6 +937,36 @@ const description =
     border-bottom: none;
   }
 
+  .control-table {
+    margin-bottom: 1.5rem;
+  }
+
+  .control-table th {
+    width: 1%;
+    vertical-align: top;
+    background: transparent;
+    border-right: 1px solid var(--line);
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.9rem;
+    color: var(--fg);
+  }
+
+  .control-table td {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    white-space: normal;
+  }
+
+  .control-table code {
+    padding: 0.15rem 0.5rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--bg-soft);
+    font-size: 0.82rem;
+  }
+
   .code-card {
     border: 1px solid var(--line);
     border-radius: var(--radius);
@@ -939,40 +979,6 @@ const description =
     font-size: 0.86rem;
     line-height: 1.7;
     overflow-x: auto;
-  }
-
-  .steps {
-    list-style: none;
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-    margin: 0;
-    padding: 0;
-  }
-
-  .steps li {
-    padding: 1.4rem;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-  }
-
-  .steps h3 {
-    display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-    margin: 0 0 0.4rem;
-    font-size: 1.02rem;
-  }
-
-  .step-index {
-    color: var(--accent);
-    font-size: 0.85rem;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .steps p {
-    margin: 0;
-    font-size: 0.93rem;
   }
 
   .notice {
