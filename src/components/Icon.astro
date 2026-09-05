@@ -24,8 +24,10 @@ const paths = {
   brush:
     '<path d="M4 20c0-2 1-3 3-3s3 1 3 3-1.5 1.5-3 1.5S4 21 4 20Z"/><path d="m9 16 9-9a2.1 2.1 0 0 0-3-3l-9 9"/>',
   chart: '<path d="M4 20V4"/><path d="M4 20h16"/><path d="M8 16v-5M12 16V7M16 16v-8"/>',
+  // A circle reads smaller than the square glyphs at the same bounding box, so
+  // the globe is drawn wider than the 4 to 20 span the others use.
   globe:
-    '<circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><path d="M12 4a13 13 0 0 1 0 16 13 13 0 0 1 0-16Z"/>',
+    '<circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19"/><path d="M12 2.5a15.5 15.5 0 0 1 0 19 15.5 15.5 0 0 1 0-19Z"/>',
   robot:
     '<rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 4v4"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M10 16h4"/>',
   book: '<path d="M5 4h9a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3Z"/><path d="M17 7h2v13H8"/>',
