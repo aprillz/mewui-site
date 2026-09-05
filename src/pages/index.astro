@@ -6,6 +6,7 @@ import Icon from "../components/Icon.astro";
 import upstream from "../data/upstream.json";
 import { links, asset } from "../config";
 import { snippet } from "../lib/snippet";
+import { loadCodeTheme } from "../lib/codeTheme";
 
 const MIB = 1024 * 1024;
 const mib = (bytes: number) => (bytes / MIB).toFixed(2);
@@ -155,7 +156,7 @@ const docs = [
 
 const helloCode = snippet("Program.cs", "hello");
 const bindingCode = snippet("BindingExample.cs", "binding");
-const CODE_THEME = "dracula";
+const CODE_THEME = await loadCodeTheme();
 
 const title = "MewUI";
 const description =
