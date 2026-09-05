@@ -322,9 +322,8 @@ const description =
     <div>
       <h2>The whole app is C#</h2>
       <p class="lede">
-        Controls are composed with a fluent API. What you read is what runs, and
-        every example on this page is compiled against the published package
-        before the site deploys.
+        Controls are composed with a fluent API. There is no markup file, no
+        designer and no generated partial class behind the window.
       </p>
     </div>
     <div class="code-card">
@@ -462,13 +461,12 @@ const description =
 
   <section id="docs">
     <h2>Documentation</h2>
-    <p class="lede">Written alongside the code, in the repository.</p>
+    <p class="lede">In English and Korean.</p>
     <div class="doc-links">
       {docs.map(([label, file]) => (
         <a href={`${links.repo}/blob/main/docs/${file}`}>{label}</a>
       ))}
     </div>
-    <p class="small muted">Every page also exists in Korean as a .ko.md file.</p>
   </section>
 </Base>
 
