@@ -72,32 +72,36 @@ const { title, description } = Astro.props;
 </html>
 
 <style is:global>
+  /* MewUI's own palette: ThemeSeed.DefaultLight / DefaultDark for the neutrals,
+     the built-in Purple accent for the highlight. */
   :root {
     color-scheme: light dark;
-    --bg: #ffffff;
-    --bg-soft: #f6f6fa;
-    --fg: #14161c;
-    --muted: #575d6b;
-    --accent: #5a4ca2;
-    --accent-soft: #ede9ff;
-    --line: #e2e3ec;
-    --code-bg: #14161c;
-    --code-fg: #e8e9f0;
+    --bg: #fafafa;
+    --bg-soft: #ffffff;
+    --fg: #1e1e1e;
+    --muted: #5f5f66;
+    --accent: #8f54db;
+    --accent-strong: #7c40cc;
+    --accent-soft: #f4ecfc;
+    --line: #e8e8e8;
+    --code-bg: #1e1e1e;
+    --code-fg: #e6e6e8;
     --radius: 12px;
     --page: 68rem;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #0e1015;
-      --bg-soft: #14171f;
-      --fg: #edeff5;
-      --muted: #9ba2b1;
-      --accent: #a58ef7;
-      --accent-soft: #1e1b33;
-      --line: #262a35;
-      --code-bg: #05060a;
-      --code-fg: #e8e9f0;
+      --bg: #1e1e1e;
+      --bg-soft: #1a1a1b;
+      --fg: #e6e6e8;
+      --muted: #a3a3aa;
+      --accent: #9e65e8;
+      --accent-strong: #ae7cf0;
+      --accent-soft: #271c3a;
+      --line: #303032;
+      --code-bg: #141415;
+      --code-fg: #e6e6e8;
     }
   }
 
