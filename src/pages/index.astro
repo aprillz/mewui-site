@@ -123,6 +123,33 @@ const controlGroups: [string, string[]][] = [
   ["Panels", upstream.panels],
 ];
 
+const tooling = [
+  {
+    icon: "eye",
+    name: "Editor preview",
+    body: "Renders a Window or UserControl in an editor panel without launching the app. The session builds once, then every save redraws the panel.",
+    href: `${links.repo}/blob/main/docs/Preview.md`,
+  },
+  {
+    icon: "refresh",
+    name: "Hot reload",
+    body: "Run under dotnet watch and edits reach the running app. MewUI rebuilds only the nodes whose build code changed, and nothing is declared to enable it.",
+    href: `${links.repo}/blob/main/docs/HotReload.md`,
+  },
+  {
+    icon: "gauge",
+    name: "DevTools",
+    body: "An element inspector, a visual tree window, a frame statistics overlay and a profiler timeline. On by default in Debug, off in Release.",
+    href: `${links.repo}/blob/main/docs/DevTools.md`,
+  },
+  {
+    icon: "wand",
+    name: "Analyzers",
+    body: "Roslyn analyzers and refactorings for fluent markup: turn an object initializer into a chain, expand or collapse one, merge statements into it. Build time only, still experimental.",
+    href: `${links.repo}/tree/main/src/MewUI.Analyzers`,
+  },
+] as const;
+
 const agentPoints = [
   {
     icon: "book",
@@ -156,6 +183,7 @@ const docs = [
   ["Application lifecycle", "ApplicationLifecycle.md"],
   ["Hot reload", "HotReload.md"],
   ["Editor preview", "Preview.md"],
+  ["DevTools", "DevTools.md"],
 ];
 
 const helloCode = snippet("Program.cs", "hello");
@@ -343,6 +371,23 @@ const description =
     </div>
     <div class="code-card">
       <Code code={bindingCode} lang="csharp" theme={CODE_THEME} />
+    </div>
+  </section>
+
+  <section id="tooling">
+    <h2>Tools while you build</h2>
+    <p class="lede">
+      Code first does not mean flying blind. The preview draws your window in
+      the editor, and the running app takes your edits as you type.
+    </p>
+    <div class="cards">
+      {tooling.map((item) => (
+        <a class="card" href={item.href}>
+          <span class="badge"><Icon name={item.icon} /></span>
+          <h3>{item.name}</h3>
+          <p>{item.body}</p>
+        </a>
+      ))}
     </div>
   </section>
 
