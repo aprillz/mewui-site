@@ -26,12 +26,12 @@ const measuredOn = new Date(upstream.sizes.generatedAtUtc)
   .toISOString()
   .slice(0, 10);
 
-const stats = [
-  { value: compact(upstream.stats.downloads), label: "NuGet downloads" },
-  { value: String(upstream.stats.stars), label: "GitHub stars" },
-  { value: String(upstream.stats.releases), label: "Releases shipped" },
-  { value: "4", label: "Windows, Linux, macOS, browser" },
-];
+const targets = [
+  { icon: "windows", name: "Windows", detail: "10 and later" },
+  { icon: "linux", name: "Linux", detail: "X11" },
+  { icon: "apple", name: "macOS", detail: "12 and later" },
+  { icon: "globe", name: "Browser", detail: "WebAssembly" },
+] as const;
 
 const highlights = [
   {
@@ -173,8 +173,30 @@ const description =
     </p>
     <div class="actions">
       <a class="primary" href={links.gallery}>Run the demo in your browser</a>
-      <a href={links.repo}>GitHub</a>
+      <a class="counted" href={links.repo}>
+        GitHub
+        <span class="count"><Icon name="star" size={15} />{upstream.stats.stars}</span>
+      </a>
+      <a class="counted" href={links.nuget}>
+        NuGet
+        <span class="count">
+          <Icon name="download" size={15} />{compact(upstream.stats.downloads)}
+        </span>
+      </a>
     </div>
+
+    <ul class="targets">
+      {targets.map((target) => (
+        <li>
+          <Icon name={target.icon} size={20} />
+          <div>
+            <strong>{target.name}</strong>
+            <span>{target.detail}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+
     <p class="small muted">
       MIT licensed. .NET {upstream.targetFrameworks.join(" and ").replace(/net/g, "")}.
       Latest release {upstream.publishedVersion}.
@@ -215,17 +237,6 @@ const description =
       </figcaption>
     </figure>
   </section>
-
-  <div class="stat-band">
-    <div class="stat-row">
-      {stats.map((stat) => (
-        <div class="stat">
-          <strong>{stat.value}</strong>
-          <span>{stat.label}</span>
-        </div>
-      ))}
-    </div>
-  </div>
 
   <section id="try" class="split">
     <div>
@@ -686,29 +697,59 @@ const description =
     font-weight: 550;
   }
 
-  .stat-band {
-    border-block: 1px solid var(--line);
+  .actions .counted {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding-right: 0.55rem;
+  }
+
+  .count {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .targets {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin: 1.75rem 0 0;
+    padding: 0;
+  }
+
+  .targets li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
     background: var(--bg-soft);
+    text-align: left;
   }
 
-  .stat-row {
-    max-width: var(--page);
-    margin: 0 auto;
-    padding: 2rem 1.25rem;
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  .targets svg {
+    color: var(--accent);
   }
 
-  .stat strong {
+  .targets strong {
     display: block;
-    font-size: 2rem;
-    letter-spacing: -0.03em;
+    font-size: 0.92rem;
+    line-height: 1.3;
   }
 
-  .stat span {
+  .targets span {
     color: var(--muted);
-    font-size: 0.9rem;
+    font-size: 0.78rem;
   }
 
   /* Uno style alternating columns: the claim on one side, the evidence on the
