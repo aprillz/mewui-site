@@ -39,7 +39,7 @@ const highlights = [
   {
     icon: "feather",
     title: "Small by design",
-    body: `A Hello World window publishes at ${mb(smallestHello.executableBytes)} MB. Low memory footprint and fast first frame follow from the same choices.`,
+    body: `A Hello World window publishes at ${mb(smallestHello.executableBytes)} MB, and the full control gallery at ${mb(galleryRows[0].executableBytes)} MB. Every figure on this page is measured, not estimated.`,
   },
   {
     icon: "brackets",
@@ -266,9 +266,43 @@ const description =
         <div class="divider" aria-hidden="true"><span class="knob"></span></div>
       </div>
       <figcaption class="small muted">
-        Drag to compare. One theme object, switched at runtime.
+        Move across to compare, click to see the whole window. One theme object,
+        switched at runtime.
       </figcaption>
     </figure>
+
+    <dialog class="lightbox" aria-label="The Gallery sample in both themes">
+      <button class="close" type="button" aria-label="Close">Close</button>
+      <div class="frame tall">
+        <img
+          src={asset("light.png")}
+          alt="The MewUI Gallery sample with the light theme"
+          width="1619"
+          height="1903"
+          loading="lazy"
+        />
+        <img
+          class="over"
+          src={asset("dark.png")}
+          alt="The same sample with the dark theme"
+          width="1619"
+          height="1903"
+          loading="lazy"
+        />
+        <span class="tag light">Light</span>
+        <span class="tag dark">Dark</span>
+        <input
+          class="range"
+          type="range"
+          min="0"
+          max="100"
+          value="50"
+          step="0.1"
+          aria-label="Move across to compare the light and dark themes"
+        />
+        <div class="divider" aria-hidden="true"><span class="knob"></span></div>
+      </div>
+    </dialog>
   </section>
 
   <section id="try">
@@ -554,7 +588,7 @@ const description =
 
 <script>
   for (const range of document.querySelectorAll<HTMLInputElement>(
-    ".theme-compare .range",
+    ".frame .range",
   )) {
     const frame = range.closest<HTMLElement>(".frame");
     if (frame === null) {
@@ -578,6 +612,22 @@ const description =
     });
 
     apply();
+  }
+
+  const lightbox = document.querySelector<HTMLDialogElement>(".lightbox");
+  const opener = document.querySelector<HTMLElement>(".theme-compare .frame");
+  if (lightbox !== null && opener !== null) {
+    opener.addEventListener("click", () => lightbox.showModal());
+    lightbox
+      .querySelector(".close")
+      ?.addEventListener("click", () => lightbox.close());
+
+    // Clicking the backdrop lands on the dialog itself, not on its content.
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) {
+        lightbox.close();
+      }
+    });
   }
 </script>
 
@@ -747,6 +797,51 @@ const description =
 
   .theme-compare figcaption {
     margin-top: 0.9rem;
+  }
+
+  .theme-compare .frame {
+    cursor: zoom-in;
+  }
+
+  .lightbox {
+    padding: 0;
+    border: none;
+    background: transparent;
+    max-width: 100vw;
+    max-height: 100vh;
+    overflow: visible;
+  }
+
+  .lightbox::backdrop {
+    background: #000000d9;
+  }
+
+  /* The frame takes its width from the capture ratio, so the overlay stays
+     aligned with the base image at any viewport height. */
+  .frame.tall {
+    height: min(86vh, 1903px);
+    width: auto;
+    aspect-ratio: 1619 / 1903;
+    max-width: 94vw;
+    cursor: col-resize;
+  }
+
+  .lightbox .close {
+    position: absolute;
+    top: -2.6rem;
+    right: 0;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid #ffffff40;
+    border-radius: 8px;
+    background: transparent;
+    color: #ffffff;
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  .lightbox .close:hover {
+    border-color: #ffffff;
   }
 
   .actions {
