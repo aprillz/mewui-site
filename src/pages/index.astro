@@ -1,0 +1,120 @@
+---
+const base = import.meta.env.BASE_URL;
+const GALLERY_URL = "https://aprillz.github.io/MewUI/Gallery/";
+const REPO_URL = "https://github.com/aprillz/MewUI";
+const NUGET_URL = "https://www.nuget.org/packages/Aprillz.MewUI/";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>MewUI</title>
+    <meta
+      name="description"
+      content="A cross-platform, lightweight, code-first .NET GUI framework for NativeAOT and trim friendly desktop apps."
+    />
+    <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+  </head>
+  <body>
+    <main>
+      <h1>MewUI</h1>
+      <p class="tagline">
+        A cross-platform, lightweight, code-first .NET GUI framework for
+        building NativeAOT and trim friendly desktop apps.
+      </p>
+      <nav class="actions">
+        <a class="primary" href={GALLERY_URL}>Try it in your browser</a>
+        <a href={REPO_URL}>GitHub</a>
+        <a href={NUGET_URL}>NuGet</a>
+      </nav>
+    </main>
+  </body>
+</html>
+
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #ffffff;
+    --fg: #16181d;
+    --muted: #5a6068;
+    --accent: #7a5cff;
+    --line: #e3e5ea;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #101216;
+      --fg: #eef0f4;
+      --muted: #a2a9b4;
+      --accent: #9d86ff;
+      --line: #2a2e37;
+    }
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    padding: 2rem 1.25rem;
+    background: var(--bg);
+    color: var(--fg);
+    font-family:
+      system-ui,
+      -apple-system,
+      "Segoe UI",
+      sans-serif;
+  }
+
+  main {
+    max-width: 34rem;
+    text-align: center;
+  }
+
+  h1 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(2.75rem, 9vw, 4rem);
+    letter-spacing: -0.02em;
+  }
+
+  .tagline {
+    margin: 0 0 2rem;
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .actions a {
+    padding: 0.7rem 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: 0.5rem;
+    color: inherit;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .actions a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .actions .primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+  }
+
+  .actions .primary:hover {
+    color: #ffffff;
+    filter: brightness(1.08);
+  }
+</style>
