@@ -15,8 +15,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PUBLIC_SITE_URL: https://aprillz.github.io
-  PUBLIC_SITE_BASE: /mewui-site
+  PUBLIC_SITE_URL: https://mewui.aprillz.net
+  PUBLIC_SITE_BASE: /
 
 jobs:
   build:
