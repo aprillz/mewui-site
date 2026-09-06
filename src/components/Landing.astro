@@ -1,0 +1,1169 @@
+---
+import { Code } from "astro:components";
+import Base from "../layouts/Base.astro";
+import CopyCommand from "./CopyCommand.astro";
+import Icon from "./Icon.astro";
+import upstream from "../data/upstream.json";
+import type { Copy } from "../copy/en";
+import { links, asset } from "../config";
+import { snippet } from "../lib/snippet";
+import { loadCodeTheme } from "../lib/codeTheme";
+
+interface Props {
+  copy: Copy;
+}
+
+const { copy } = Astro.props;
+
+// Binary megabytes, matching how the repository reports publish sizes.
+const MEGABYTE = 1024 * 1024;
+const mb = (bytes: number) => (bytes / MEGABYTE).toFixed(2);
+const compact = (value: number) =>
+  value >= 1000 ? `${(value / 1000).toFixed(1)}K` : String(value);
+
+const helloRows = upstream.sizes.entries.filter(
+  (entry) => entry.sample === "Hello World",
+);
+const galleryRows = upstream.sizes.entries.filter(
+  (entry) => entry.sample === "Gallery",
+);
+const smallestHello = helloRows.reduce((a, b) =>
+  a.executableBytes <= b.executableBytes ? a : b,
+);
+
+const targets = [
+  { icon: "windows", ...copy.targets.windows },
+  { icon: "linux", ...copy.targets.linux },
+  { icon: "apple", ...copy.targets.macos },
+  { icon: "globe", ...copy.targets.browser },
+] as const;
+
+const highlights = [
+  { icon: "chip", ...copy.why.aot },
+  {
+    icon: "feather",
+    title: copy.why.small.title,
+    body: copy.why.small.body(
+      mb(smallestHello.executableBytes),
+      mb(galleryRows[0].executableBytes),
+    ),
+  },
+  { icon: "brackets", ...copy.why.markup },
+  { icon: "targets", ...copy.why.targets },
+] as const;
+
+const extensions = [
+  {
+    icon: "dock",
+    name: "MewDock",
+    body: copy.extensions.mewDock,
+    href: `${links.repo}/tree/main/extensions/MewUI.MewDock`,
+  },
+  {
+    icon: "vector",
+    name: "SVG",
+    body: copy.extensions.svg,
+    href: `${links.repo}/tree/main/extensions/MewUI.Svg`,
+  },
+  {
+    icon: "brush",
+    name: "Skia",
+    body: copy.extensions.skia,
+    href: `${links.repo}/tree/main/extensions/MewUI.Skia`,
+  },
+  {
+    icon: "chart",
+    name: "MewCharts",
+    body: copy.extensions.mewCharts,
+    href: `${links.repo}/tree/main/extensions/MewUI.MewCharts`,
+  },
+  {
+    icon: "globe",
+    name: "WebView2",
+    body: copy.extensions.webView2,
+    href: `${links.repo}/tree/main/extensions/MewUI.WebView2.Win32`,
+  },
+] as const;
+
+const platforms = [
+  { platform: "Windows 10+", host: "Win32", backends: "Direct2D, GDI, MewVG" },
+  { platform: "Linux", host: "X11", backends: "MewVG (OpenGL)" },
+  { platform: "macOS 12+", host: "AppKit", backends: "MewVG (Metal)" },
+  { platform: "Browser", host: "WebAssembly", backends: "MewVG (WebGL2)" },
+];
+
+// Category keys are ours, the control names come from the README (5.1 in the
+// plan), so a control added upstream shows up here and a removed one disappears.
+const CONTROL_GROUPS: [keyof Copy["controls"]["groups"], string[]][] = [
+  ["buttons", ["Button", "ToggleButton", "RepeatButton", "SplitButton", "DropDownButton"]],
+  ["text", ["Label", "TextBlock", "TextBox", "MultiLineTextBox", "PasswordBox", "SyntaxViewer"]],
+  ["selection", ["CheckBox", "RadioButton", "ToggleSwitch", "ComboBox", "ListBox"]],
+  ["data", ["TreeView", "GridView"]],
+  ["values", ["Slider", "ProgressBar", "ProgressRing", "NumericUpDown", "ColorPicker", "DatePicker", "Calendar"]],
+  ["containers", ["TabControl", "GroupBox", "Expander", "Border", "ScrollViewer", "NavigationView"]],
+  ["menus", ["MenuBar", "ContextMenu", "ToolTip", "ToolBar"]],
+  ["media", ["Image"]],
+  ["app", ["Window", "DispatcherTimer"]],
+];
+
+const known = new Set(CONTROL_GROUPS.flatMap(([, members]) => members));
+const uncategorised = upstream.controls.filter((name) => !known.has(name));
+const controlGroups: [string, string[]][] = [
+  ...CONTROL_GROUPS.map(
+    ([key, members]) =>
+      [
+        copy.controls.groups[key],
+        members.filter((name) => upstream.controls.includes(name)),
+      ] as [string, string[]],
+  ).filter(([, members]) => members.length > 0),
+  ...(uncategorised.length > 0
+    ? ([[copy.controls.groups.more, uncategorised]] as [string, string[]][])
+    : []),
+  [copy.controls.groups.panels, upstream.panels],
+];
+
+const tooling = [
+  {
+    icon: "eye",
+    ...copy.tooling.preview,
+    href: `${links.repo}/blob/main/docs/Preview.md`,
+  },
+  {
+    icon: "refresh",
+    ...copy.tooling.hotReload,
+    href: `${links.repo}/blob/main/docs/HotReload.md`,
+  },
+  {
+    icon: "gauge",
+    ...copy.tooling.devTools,
+    href: `${links.repo}/blob/main/docs/DevTools.md`,
+  },
+  {
+    icon: "wand",
+    ...copy.tooling.analyzers,
+    href: `${links.repo}/tree/main/src/MewUI.Analyzers`,
+  },
+] as const;
+
+const agentPoints = [
+  { icon: "book", ...copy.ai.recipes },
+  { icon: "brackets", ...copy.ai.markup },
+  { icon: "ruler", ...copy.ai.verify },
+] as const;
+
+// Korean readers get the Korean document of the same topic.
+const docFile = (file: string) =>
+  copy.lang === "ko" ? file.replace(/\.md$/, ".ko.md") : file;
+
+const helloCode = snippet("Program.cs", "hello");
+const bindingCode = snippet("BindingExample.cs", "binding");
+const CODE_THEME = await loadCodeTheme();
+---
+
+<Base copy={copy}>
+  <section class="hero">
+    <img class="wordmark" src={asset("logo_h-1280.webp")} alt="MewUI" width="420" height="184" />
+    <h1>{copy.hero.headline}</h1>
+    <p class="lede">{copy.hero.lede}</p>
+    <div class="actions">
+      <a class="primary" href={links.gallery}>{copy.hero.demo}</a>
+      <a class="counted" href={links.repo}>
+        GitHub
+        <span class="count"><Icon name="star" size={15} />{upstream.stats.stars}</span>
+      </a>
+      <a class="counted" href={links.nuget}>
+        NuGet
+        <span class="count">
+          <Icon name="download" size={15} />{compact(upstream.stats.downloads)}
+        </span>
+      </a>
+    </div>
+
+    <ul class="targets">
+      {targets.map((target) => (
+        <li>
+          <Icon name={target.icon} size={28} />
+          <div>
+            <strong>{target.name}</strong>
+            <span>{target.detail}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <p class="small muted">
+      {copy.hero.meta(
+        upstream.targetFrameworks.join(" / ").replace(/net/g, ""),
+        upstream.publishedVersion,
+      )}
+    </p>
+
+    <figure class="theme-compare">
+      <div class="frame">
+        <img
+          src={asset("light.png")}
+          alt={copy.hero.lightAlt}
+          width="1619"
+          height="1903"
+          loading="eager"
+        />
+        <img
+          class="over"
+          src={asset("dark.png")}
+          alt={copy.hero.darkAlt}
+          width="1619"
+          height="1903"
+          loading="eager"
+        />
+        <span class="tag light">Light</span>
+        <span class="tag dark">Dark</span>
+        <input
+          class="range"
+          type="range"
+          min="0"
+          max="100"
+          value="50"
+          step="0.1"
+          aria-label={copy.hero.compareLabel}
+        />
+        <div class="divider" aria-hidden="true"><span class="knob"></span></div>
+      </div>
+      <figcaption class="small muted">{copy.hero.caption}</figcaption>
+    </figure>
+
+    <dialog class="lightbox" aria-label={copy.hero.dialogLabel}>
+      <button class="close" type="button" aria-label={copy.hero.close}>
+        {copy.hero.close}
+      </button>
+      <div class="frame tall">
+        <img
+          src={asset("light.png")}
+          alt={copy.hero.lightAlt}
+          width="1619"
+          height="1903"
+          loading="lazy"
+        />
+        <img
+          class="over"
+          src={asset("dark.png")}
+          alt={copy.hero.darkAlt}
+          width="1619"
+          height="1903"
+          loading="lazy"
+        />
+        <span class="tag light">Light</span>
+        <span class="tag dark">Dark</span>
+        <input
+          class="range"
+          type="range"
+          min="0"
+          max="100"
+          value="50"
+          step="0.1"
+          aria-label={copy.hero.compareLabel}
+        />
+        <div class="divider" aria-hidden="true"><span class="knob"></span></div>
+      </div>
+    </dialog>
+  </section>
+
+  <section id="try">
+    <h2>{copy.try.title}</h2>
+    <p class="lede">{copy.try.lede}</p>
+    <ol class="ladder">
+      <li>
+        <div class="rung">
+          <span class="step">1</span>
+          <div>
+            <h3>{copy.try.browser.title}</h3>
+            <p class="muted">{copy.try.browser.body}</p>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="primary" href={links.gallery}>{copy.try.browser.action}</a>
+        </div>
+      </li>
+      <li>
+        <div class="rung">
+          <span class="step">2</span>
+          <div>
+            <h3>{copy.try.command.title}</h3>
+            <p class="muted">{copy.try.command.body}</p>
+          </div>
+        </div>
+        <CopyCommand command={upstream.tryCommand} />
+      </li>
+      <li>
+        <div class="rung">
+          <span class="step">3</span>
+          <div>
+            <h3>{copy.try.project.title}</h3>
+            <p class="muted">{copy.try.project.body}</p>
+          </div>
+        </div>
+        <CopyCommand command="dotnet add package Aprillz.MewUI" />
+      </li>
+    </ol>
+  </section>
+
+  <section id="why">
+    <h2>{copy.why.title}</h2>
+    <p class="lede">{copy.why.lede}</p>
+    <div class="cards">
+      {highlights.map((item) => (
+        <article class="card">
+          <span class="badge"><Icon name={item.icon} /></span>
+          <h3>{item.title}</h3>
+          <p>{item.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="size" class="split">
+    <div>
+      <h2>{copy.size.title}</h2>
+      <p class="lede">{copy.size.lede}</p>
+      <div class="size-headline">
+        <div>
+          <strong>{mb(smallestHello.executableBytes)}<span> MB</span></strong>
+          <p>{copy.size.helloCaption(smallestHello.platformBackend)}</p>
+        </div>
+        <div>
+          <strong>{mb(galleryRows[0].executableBytes)}<span> MB</span></strong>
+          <p>{copy.size.galleryCaption}</p>
+        </div>
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>{copy.size.columnPlatform}</th>
+            <th>{copy.size.columnHello}</th>
+            <th>{copy.size.columnGallery}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {helloRows.map((hello) => {
+            const gallery = galleryRows.find(
+              (row) => row.platformBackend === hello.platformBackend,
+            );
+            return (
+              <tr>
+                <td>{hello.platformBackend}</td>
+                <td>{mb(hello.executableBytes)} MB</td>
+                <td>{gallery ? `${mb(gallery.executableBytes)} MB` : "-"}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="code" class="split">
+    <div>
+      <h2>{copy.code.title}</h2>
+      <p class="lede">{copy.code.lede}</p>
+    </div>
+    <div class="code-card">
+      <Code code={helloCode} lang="csharp" theme={CODE_THEME} />
+    </div>
+  </section>
+
+  <section id="binding" class="split reverse">
+    <div>
+      <h2>{copy.binding.title}</h2>
+      <p class="lede">{copy.binding.lede}</p>
+    </div>
+    <div class="code-card">
+      <Code code={bindingCode} lang="csharp" theme={CODE_THEME} />
+    </div>
+  </section>
+
+  <section id="tooling">
+    <h2>{copy.tooling.title}</h2>
+    <p class="lede">{copy.tooling.lede}</p>
+    <div class="cards">
+      {tooling.map((item) => (
+        <a class="card" href={item.href}>
+          <span class="badge"><Icon name={item.icon} /></span>
+          <h3>{item.name}</h3>
+          <p>{item.body}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section id="ai" class="split">
+    <div>
+      <h2>{copy.ai.title}</h2>
+      <p class="lede">{copy.ai.lede}</p>
+      <div class="actions">
+        <a class="primary" href={`${links.repo}/tree/main/skills`}>
+          {copy.ai.action}
+        </a>
+      </div>
+    </div>
+    <ul class="feature-list">
+      {agentPoints.map((item) => (
+        <li>
+          <span class="badge"><Icon name={item.icon} /></span>
+          <div>
+            <h3>{item.title}</h3>
+            <p class="muted">{item.body}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section id="controls">
+    <h2>{copy.controls.title}</h2>
+    <p class="lede">{copy.controls.lede}</p>
+    <div class="table-scroll control-table">
+      <table>
+        <tbody>
+          {controlGroups.map(([label, members]) => (
+            <tr>
+              <th scope="row">{label}</th>
+              <td>
+                {members.map((name) => (
+                  <code>{name}</code>
+                ))}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <div class="actions">
+      <a class="primary" href={links.gallery}>{copy.controls.openGallery}</a>
+      <a href={`${links.repo}/tree/main/samples`}>{copy.controls.samples}</a>
+    </div>
+  </section>
+
+  <section id="extensions">
+    <h2>{copy.extensions.title}</h2>
+    <p class="lede">{copy.extensions.lede}</p>
+    <div class="cards">
+      {extensions.map((item) => (
+        <a class="card" href={item.href}>
+          <span class="badge"><Icon name={item.icon} /></span>
+          <h3>{item.name}</h3>
+          <p>{item.body}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section id="platforms" class="split">
+    <div>
+      <h2>{copy.platforms.title}</h2>
+      <p class="lede">{copy.platforms.lede}</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>{copy.platforms.columnPlatform}</th>
+            <th>{copy.platforms.columnHost}</th>
+            <th>{copy.platforms.columnBackends}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {platforms.map((row) => (
+            <tr>
+              <td>{row.platform}</td>
+              <td>{row.host}</td>
+              <td>{row.backends}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="status">
+    <div class="notice">
+      <h2>{copy.status.title}</h2>
+      <p>{copy.status.body(upstream.publishedVersion)}</p>
+      <a class="text-link" href={`${links.repo}/releases`}>
+        {copy.status.action}
+      </a>
+    </div>
+  </section>
+
+  <section id="docs">
+    <h2>{copy.docs.title}</h2>
+    <p class="lede">{copy.docs.lede}</p>
+    <div class="doc-links">
+      {Object.entries(copy.docs.entries).map(([file, label]) => (
+        <a href={`${links.repo}/blob/main/docs/${docFile(file)}`}>{label}</a>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<script>
+  for (const range of document.querySelectorAll<HTMLInputElement>(
+    ".frame .range",
+  )) {
+    const frame = range.closest<HTMLElement>(".frame");
+    if (frame === null) {
+      continue;
+    }
+
+    const apply = () => frame.style.setProperty("--pos", `${range.value}%`);
+    range.addEventListener("input", apply);
+
+    // Hovering is enough to move the split. The range stays underneath so
+    // dragging, touch and the arrow keys keep working.
+    frame.addEventListener("pointermove", (event) => {
+      const bounds = frame.getBoundingClientRect();
+      if (bounds.width === 0) {
+        return;
+      }
+
+      const ratio = ((event.clientX - bounds.left) / bounds.width) * 100;
+      range.value = String(Math.min(100, Math.max(0, ratio)));
+      apply();
+    });
+
+    apply();
+  }
+
+  const lightbox = document.querySelector<HTMLDialogElement>(".lightbox");
+  const opener = document.querySelector<HTMLElement>(".theme-compare .frame");
+  if (lightbox !== null && opener !== null) {
+    opener.addEventListener("click", () => lightbox.showModal());
+    lightbox
+      .querySelector(".close")
+      ?.addEventListener("click", () => lightbox.close());
+
+    // Clicking the backdrop lands on the dialog itself, not on its content.
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) {
+        lightbox.close();
+      }
+    });
+  }
+</script>
+
+<style>
+  .hero {
+    text-align: center;
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .wordmark {
+    width: min(26rem, 84%);
+    height: auto;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 {
+    max-width: 22ch;
+    margin: 0 auto 1rem;
+    font-size: clamp(2rem, 4.6vw, 3rem);
+  }
+
+  .hero .lede {
+    max-width: 42rem;
+    margin: 0 auto 2rem;
+    color: var(--muted);
+    font-size: 1.08rem;
+  }
+
+  .hero .actions {
+    justify-content: center;
+  }
+
+  .hero .small {
+    margin-top: 1.25rem;
+  }
+
+  .theme-compare {
+    max-width: 46rem;
+    margin: 3rem auto 0;
+  }
+
+  /* The two captures are the same window at the same pixel size, so revealing
+     one over the other reads as a single app changing theme. */
+  .frame {
+    --pos: 50%;
+    position: relative;
+    /* The captures are portrait and would tower over the hero, so the frame
+       shows the top half and crops the rest. */
+    aspect-ratio: 1619 / 952;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 26px 70px -34px #00000080;
+    touch-action: pan-y;
+  }
+
+  .frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .frame .over {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    clip-path: inset(0 0 0 var(--pos));
+  }
+
+  .divider {
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--pos);
+    width: 2px;
+    margin-left: -1px;
+    background: var(--accent);
+  }
+
+  .knob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2.4rem;
+    height: 2.4rem;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 2px 12px #0000004d;
+  }
+
+  .knob::before,
+  .knob::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border-block: 5px solid transparent;
+  }
+
+  .knob::before {
+    left: 0.55rem;
+    border-right: 6px solid #ffffff;
+    transform: translateY(-50%);
+  }
+
+  .knob::after {
+    right: 0.55rem;
+    border-left: 6px solid #ffffff;
+    transform: translateY(-50%);
+  }
+
+  .range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: col-resize;
+    appearance: none;
+    background: transparent;
+  }
+
+  .range::-webkit-slider-thumb {
+    appearance: none;
+    width: 1px;
+    height: 100%;
+  }
+
+  .range::-moz-range-thumb {
+    width: 1px;
+    height: 100%;
+    border: none;
+  }
+
+  .range:focus-visible ~ .divider {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .tag {
+    position: absolute;
+    top: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: #00000073;
+    color: #ffffff;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+
+  .tag.light {
+    left: 0.75rem;
+  }
+
+  .tag.dark {
+    right: 0.75rem;
+  }
+
+  .theme-compare figcaption {
+    margin-top: 0.9rem;
+  }
+
+  .theme-compare .frame {
+    cursor: zoom-in;
+  }
+
+  .lightbox {
+    padding: 0;
+    border: none;
+    background: transparent;
+    max-width: 100vw;
+    max-height: 100vh;
+    overflow: visible;
+  }
+
+  .lightbox::backdrop {
+    background: #000000d9;
+  }
+
+  /* The frame takes its width from the capture ratio, so the overlay stays
+     aligned with the base image at any viewport height. */
+  .frame.tall {
+    height: min(86vh, 1903px);
+    width: auto;
+    aspect-ratio: 1619 / 1903;
+    max-width: 94vw;
+    cursor: col-resize;
+  }
+
+  .lightbox .close {
+    position: absolute;
+    top: -2.6rem;
+    right: 0;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid #ffffff40;
+    border-radius: 8px;
+    background: transparent;
+    color: #ffffff;
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  .lightbox .close:hover {
+    border-color: #ffffff;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
+
+  .actions a {
+    padding: 0.7rem 1.2rem;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    color: inherit;
+    text-decoration: none;
+    font-weight: 550;
+  }
+
+  .actions a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .actions .primary,
+  .actions .primary:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+  }
+
+  .text-link {
+    display: inline-block;
+    font-weight: 550;
+  }
+
+  .actions .counted {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding-right: 0.55rem;
+  }
+
+  .count {
+    font-family: var(--font-mono);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .targets {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin: 1.75rem 0 0;
+    padding: 0;
+  }
+
+  .targets li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 1.1rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--bg-soft);
+    text-align: left;
+  }
+
+  .targets svg {
+    color: var(--accent);
+  }
+
+  .targets strong {
+    display: block;
+    font-size: 0.92rem;
+    line-height: 1.3;
+  }
+
+  .targets span {
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  /* Uno style alternating columns: the claim on one side, the evidence on the
+     other. .reverse puts the evidence first on wide screens only. */
+  .split {
+    display: grid;
+    gap: 3rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .split > div > h2,
+  .split > div > h2 + .lede {
+    max-width: 34rem;
+  }
+
+  .split > div > h2 {
+    margin: 0 0 0.5rem;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+  }
+
+  .split > div > .lede {
+    margin: 0 0 1.5rem;
+    color: var(--muted);
+  }
+
+  .split.reverse > :first-child {
+    order: 2;
+  }
+
+  .badge {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: 0.9rem;
+    border-radius: 10px;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  .ladder {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .ladder li {
+    display: grid;
+    gap: 1.25rem;
+    align-items: center;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    padding: 1.4rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--bg-soft);
+  }
+
+  .rung {
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+  }
+
+  .step {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 650;
+  }
+
+  .rung h3 {
+    margin: 0 0 0.3rem;
+    font-size: 1.05rem;
+  }
+
+  .rung p {
+    margin: 0;
+    font-size: 0.93rem;
+  }
+
+  .cards {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
+  .card {
+    display: block;
+    padding: 1.4rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--bg-soft);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  a.card:hover {
+    border-color: var(--accent);
+  }
+
+  .card h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.05rem;
+  }
+
+  .card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .feature-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .feature-list li {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .feature-list .badge {
+    margin-bottom: 0;
+  }
+
+  .feature-list h3 {
+    margin: 0.15rem 0 0.25rem;
+    font-size: 1.02rem;
+  }
+
+  .feature-list p {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .size-headline {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    margin-bottom: 1.25rem;
+  }
+
+  .size-headline > div {
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--accent-soft);
+  }
+
+  .size-headline strong {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+  }
+
+  .size-headline strong span {
+    font-size: 1.1rem;
+    letter-spacing: 0;
+  }
+
+  .size-headline p {
+    margin: 0.35rem 0 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  th,
+  td {
+    text-align: left;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+  }
+
+  th {
+    background: var(--bg-soft);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .control-table {
+    margin-bottom: 1.5rem;
+  }
+
+  .control-table th {
+    width: 1%;
+    vertical-align: top;
+    background: transparent;
+    border-right: 1px solid var(--line);
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.9rem;
+    color: var(--fg);
+  }
+
+  .control-table td {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    white-space: normal;
+  }
+
+  .control-table code {
+    padding: 0.15rem 0.5rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--bg-soft);
+    font-size: 0.82rem;
+  }
+
+  .code-card {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .code-card :global(pre) {
+    margin: 0;
+    padding: 1.35rem 1.5rem;
+    font-size: 0.86rem;
+    line-height: 1.7;
+    overflow-x: auto;
+  }
+
+  .notice {
+    padding: 2rem;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    background: var(--bg-soft);
+  }
+
+  .notice h2 {
+    margin: 0 0 0.6rem;
+    font-size: 1.3rem;
+  }
+
+  .notice p {
+    margin: 0 0 1rem;
+    color: var(--muted);
+    max-width: 46rem;
+  }
+
+  .doc-links {
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
+  .doc-links a {
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+
+  .doc-links a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  #docs .small {
+    margin-top: 1.25rem;
+  }
+
+  @media (max-width: 60rem) {
+    .ladder li {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1rem;
+    }
+
+    .split {
+      /* Plain 1fr resolves to minmax(auto, 1fr), so a wide code block or
+         command would widen the column rather than scroll inside it. */
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2rem;
+    }
+
+    .split.reverse > :first-child {
+      order: 0;
+    }
+  }
+</style>

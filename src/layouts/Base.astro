@@ -1,16 +1,18 @@
 ---
 import upstream from "../data/upstream.json";
+import type { Copy } from "../copy/en";
 import { links, base, asset } from "../config";
 
 interface Props {
-  title: string;
-  description: string;
+  copy: Copy;
 }
 
-const { title, description } = Astro.props;
+const { copy } = Astro.props;
+const { title, description } = copy;
+const localeHref = (path: string) => `${base}${path}`;
 ---
 
-<html lang="en">
+<html lang={copy.lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -24,6 +26,9 @@ const { title, description } = Astro.props;
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href={asset("logo.svg")} type="image/svg+xml" />
     <link rel="canonical" href={Astro.url.href} />
+    <link rel="alternate" hreflang="en" href={new URL(localeHref("/"), Astro.site)} />
+    <link rel="alternate" hreflang="ko" href={new URL(localeHref("/ko/"), Astro.site)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(localeHref("/"), Astro.site)} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -33,13 +38,16 @@ const { title, description } = Astro.props;
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href={base === "" ? "/" : `${base}/`}>
+      <a class="brand" href={localeHref(copy.path)}>
         <img src={asset("logo_h-480.png")} alt="MewUI" width="480" height="135" />
       </a>
       <nav>
-        <a href={links.docs}>Docs</a>
-        <a href={links.nuget}>NuGet</a>
-        <a href={links.repo}>GitHub</a>
+        <a href={links.docs}>{copy.nav.docs}</a>
+        <a href={links.nuget}>{copy.nav.nuget}</a>
+        <a href={links.repo}>{copy.nav.github}</a>
+        <a class="locale" href={localeHref(copy.otherLocalePath)}>
+          {copy.otherLocaleLabel}
+        </a>
       </nav>
     </header>
 
@@ -49,29 +57,24 @@ const { title, description } = Astro.props;
       <div class="footer-grid">
         <div>
           <img class="footer-logo" src={asset("logo.svg")} alt="MewUI" width="32" height="32" />
-          <p class="muted">
-            A cross-platform, lightweight, code-first .NET GUI framework.
-            Released under the MIT License.
-          </p>
+          <p class="muted">{copy.footer.tagline}</p>
         </div>
         <div>
-          <h3>Project</h3>
+          <h3>{copy.footer.project}</h3>
           <a href={links.repo}>GitHub</a>
-          <a href={links.docs}>Documentation</a>
+          <a href={links.docs}>{copy.footer.documentation}</a>
           <a href={links.nuget}>NuGet</a>
-          <a href={links.gallery}>Browser demo</a>
+          <a href={links.gallery}>{copy.footer.demo}</a>
         </div>
         <div>
-          <h3>Community</h3>
-          <a href={`${links.repo}/blob/main/CONTRIBUTING.md`}>Contributing</a>
-          <a href={`${links.repo}/blob/main/.github/CODE_OF_CONDUCT.md`}>Code of conduct</a>
-          <a href={`${links.repo}/blob/main/THIRD_PARTY_NOTICES.md`}>Third party notices</a>
-          <a href={`${links.repo}/blob/main/LICENSE`}>License</a>
+          <h3>{copy.footer.community}</h3>
+          <a href={`${links.repo}/blob/main/CONTRIBUTING.md`}>{copy.footer.contributing}</a>
+          <a href={`${links.repo}/blob/main/.github/CODE_OF_CONDUCT.md`}>{copy.footer.codeOfConduct}</a>
+          <a href={`${links.repo}/blob/main/THIRD_PARTY_NOTICES.md`}>{copy.footer.notices}</a>
+          <a href={`${links.repo}/blob/main/LICENSE`}>{copy.footer.license}</a>
         </div>
       </div>
-      <p class="muted small">
-        Version {upstream.publishedVersion} on NuGet. In loving memory of April.
-      </p>
+      <p class="muted small">{copy.footer.version(upstream.publishedVersion)}</p>
     </footer>
   </body>
 </html>
@@ -211,6 +214,12 @@ const { title, description } = Astro.props;
 
   .site-header nav a:hover {
     color: var(--accent);
+  }
+
+  .site-header nav .locale {
+    padding: 0.15rem 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
   }
 
   .site-footer {
