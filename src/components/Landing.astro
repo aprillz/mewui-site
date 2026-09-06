@@ -507,6 +507,8 @@ const CODE_THEME = await loadCodeTheme();
 </Base>
 
 <script>
+  const SETTLE_MS = 260;
+
   for (const range of document.querySelectorAll<HTMLInputElement>(
     ".frame .range",
   )) {
@@ -531,13 +533,74 @@ const CODE_THEME = await loadCodeTheme();
       apply();
     });
 
+    let settleTimer = 0;
+
+    // Where the pointer leaves decides where the split rests: out the left and
+    // dark takes the frame, out the right and light does, out the top or the
+    // bottom and it returns to the middle. Touch has no hover, and a leave
+    // there would undo the drag that just happened.
+    frame.addEventListener("pointerleave", (event) => {
+      if (event.pointerType !== "mouse") {
+        return;
+      }
+
+      const bounds = frame.getBoundingClientRect();
+      let rest = 50;
+      if (event.clientX <= bounds.left) {
+        rest = 0;
+      } else if (event.clientX >= bounds.right) {
+        rest = 100;
+      }
+
+      frame.classList.add("settling");
+      range.value = String(rest);
+      apply();
+
+      window.clearTimeout(settleTimer);
+      settleTimer = window.setTimeout(
+        () => frame.classList.remove("settling"),
+        SETTLE_MS,
+      );
+    });
+
+    frame.addEventListener("pointerenter", () => {
+      window.clearTimeout(settleTimer);
+      frame.classList.remove("settling");
+    });
+
     apply();
   }
 
   const lightbox = document.querySelector<HTMLDialogElement>(".lightbox");
   const opener = document.querySelector<HTMLElement>(".theme-compare .frame");
   if (lightbox !== null && opener !== null) {
-    opener.addEventListener("click", () => lightbox.showModal());
+    // A drag on the slider ends in a click too, so only a tap that stayed put
+    // counts as a request to enlarge.
+    let startX = 0;
+    let startY = 0;
+    let dragged = false;
+
+    opener.addEventListener("pointerdown", (event) => {
+      startX = event.clientX;
+      startY = event.clientY;
+      dragged = false;
+    });
+
+    opener.addEventListener("pointermove", (event) => {
+      if (event.buttons === 0) {
+        return;
+      }
+      if (Math.hypot(event.clientX - startX, event.clientY - startY) > 8) {
+        dragged = true;
+      }
+    });
+
+    opener.addEventListener("click", () => {
+      if (!dragged) {
+        lightbox.showModal();
+      }
+    });
+
     lightbox
       .querySelector(".close")
       ?.addEventListener("click", () => lightbox.close());
@@ -609,6 +672,13 @@ const CODE_THEME = await loadCodeTheme();
     display: block;
     width: 100%;
     height: auto;
+  }
+
+  .frame.settling .over,
+  .frame.settling .divider {
+    transition:
+      clip-path 260ms ease,
+      left 260ms ease;
   }
 
   .frame .over {
