@@ -80,11 +80,11 @@ export const en = {
     small: {
       title: "Small by design",
       body: (hello: string, gallery: string) =>
-        `A Hello World window publishes at ${hello} MB, and the full control gallery at ${gallery} MB. Every figure on this page is measured, not estimated.`,
+        `A Hello World window publishes at ${hello} MB, and the full control gallery at ${gallery} MB.`,
     },
     markup: {
       title: "C# markup, no XAML",
-      body: "Build the UI tree with a fluent API in plain C#. No markup compiler, no designer, no second language to learn.",
+      body: "Build the UI tree with a fluent API in plain C#. The editor preview draws the window while you type, and the analyzers lay out the chains, turn an object initializer into one, and expand or collapse it.",
     },
     targets: {
       title: "One codebase, four targets",
@@ -93,7 +93,7 @@ export const en = {
   },
 
   size: {
-    title: "Measured, not claimed",
+    title: "Deployment size",
     lede: "Every number here is the main executable of a NativeAOT publish, measured by the repository's own size tooling. Binary units, so 1 MB is 1024 KB.",
     helloCaption: (platformBackend: string) => `Hello World, ${platformBackend}`,
     galleryCaption: "Gallery, the full control showcase",

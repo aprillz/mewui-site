@@ -80,11 +80,11 @@ export const ko: Copy = {
     small: {
       title: "작게 설계됨",
       body: (hello: string, gallery: string) =>
-        `Hello World 창은 ${hello} MB, 전체 컨트롤 갤러리는 ${gallery} MB로 배포됩니다. 이 페이지의 모든 수치는 추정이 아니라 실측입니다.`,
+        `Hello World 창은 ${hello} MB, 전체 컨트롤 갤러리는 ${gallery} MB로 배포됩니다.`,
     },
     markup: {
       title: "XAML 없는 C# 마크업",
-      body: "순수 C#의 fluent API로 UI 트리를 구성합니다. 마크업 컴파일러도, 디자이너도, 따로 배울 언어도 없습니다.",
+      body: "순수 C#의 fluent API로 UI 트리를 구성합니다. 에디터 프리뷰가 작성 중인 창을 그려주고, 분석기가 체인을 정렬하고 객체 초기화자를 체인으로 바꾸며 펼치거나 접습니다.",
     },
     targets: {
       title: "하나의 코드베이스, 네 개의 대상",
@@ -93,7 +93,7 @@ export const ko: Copy = {
   },
 
   size: {
-    title: "주장이 아니라 측정값",
+    title: "배포 크기",
     lede: "여기 있는 모든 수치는 NativeAOT 퍼블리시의 주 실행 파일 크기이며, 저장소의 크기 측정 도구로 잰 값입니다. 이진 단위 기준이라 1 MB는 1024 KB입니다.",
     helloCaption: (platformBackend: string) => `Hello World, ${platformBackend}`,
     galleryCaption: "Gallery, 전체 컨트롤 쇼케이스",
