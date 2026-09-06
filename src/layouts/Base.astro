@@ -203,8 +203,10 @@ const localeHref = (path: string) => `${base}${path}`;
 
   .site-header nav {
     display: flex;
+    flex-wrap: nowrap;
     gap: 1.25rem;
     font-size: 0.95rem;
+    white-space: nowrap;
   }
 
   .site-header nav a {
@@ -220,6 +222,28 @@ const localeHref = (path: string) => `${base}${path}`;
     padding: 0.15rem 0.6rem;
     border: 1px solid var(--line);
     border-radius: 999px;
+  }
+
+  /* The four nav items plus the wordmark overflow a phone, and a wrapped
+     header pushes the hero down, so both sides shrink instead. */
+  @media (max-width: 34rem) {
+    .site-header {
+      padding: 0.6rem 0.9rem;
+      gap: 0.6rem;
+    }
+
+    .brand img {
+      height: 1.65rem;
+    }
+
+    .site-header nav {
+      gap: 0.7rem;
+      font-size: 0.82rem;
+    }
+
+    .site-header nav .locale {
+      padding: 0.1rem 0.45rem;
+    }
   }
 
   .site-footer {
