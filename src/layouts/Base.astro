@@ -203,13 +203,19 @@ const localeHref = (path: string) => `${base}${path}`;
 
   .site-header nav {
     display: flex;
+    align-items: center;
     flex-wrap: nowrap;
     gap: 1.25rem;
     font-size: 0.95rem;
     white-space: nowrap;
   }
 
+  /* The plain links are inline and the language pill is padded, so their text
+     sat on different lines until both became flex boxes of the same height. */
   .site-header nav a {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1.2;
     color: var(--muted);
     text-decoration: none;
   }
