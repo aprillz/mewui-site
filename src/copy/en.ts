@@ -75,12 +75,12 @@ export const en = {
     lede: "The framework optimizes for one thing: a small, self contained desktop app that starts fast.",
     aot: {
       title: "NativeAOT and trimming first",
-      body: "Explicit code paths and source generated interop, with no reflection based binding. Publish one native executable that runs without a .NET runtime installed.",
+      body: "Explicit code with no reflection, so trimming works. Publish one native executable that runs with no .NET runtime installed.",
     },
     small: {
       title: "Small by design",
       body: (hello: string, gallery: string) =>
-        `A Hello World window publishes at ${hello} MB, and the full control gallery at ${gallery} MB.`,
+        `An AOT build comes out at ${hello} MB for a Hello World window and ${gallery} MB for the full control gallery.`,
     },
     markup: {
       title: "C# markup, no XAML",
@@ -117,7 +117,7 @@ export const en = {
     lede: "Code first does not mean flying blind. The preview draws your window in the editor, and the running app takes your edits as you type.",
     preview: {
       name: "Editor preview",
-      body: "Renders a Window or UserControl in an editor panel without launching the app. The session builds once, then every save redraws the panel.",
+      body: "Renders a Window or UserControl in an editor panel without launching the app. Visual Studio, VS Code and Rider. The session builds once, then every save redraws the panel.",
     },
     hotReload: {
       name: "Hot reload",

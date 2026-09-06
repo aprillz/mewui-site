@@ -75,16 +75,16 @@ export const ko: Copy = {
     lede: "이 프레임워크는 한 가지를 위해 최적화되어 있습니다. 작고, 자체 완결적이며, 빠르게 뜨는 데스크톱 앱입니다.",
     aot: {
       title: "NativeAOT와 트리밍 우선",
-      body: "명시적인 코드 경로와 소스 생성 interop을 쓰고, 리플렉션 기반 바인딩이 없습니다. .NET 런타임 없이 실행되는 네이티브 실행 파일 하나로 배포합니다.",
+      body: "리플렉션 없는 명시적 코드라 트리밍이 잘 듣습니다. .NET 런타임 없이 실행되는 실행 파일 하나로 배포합니다.",
     },
     small: {
       title: "작게 설계됨",
       body: (hello: string, gallery: string) =>
-        `Hello World 창은 ${hello} MB, 전체 컨트롤 갤러리는 ${gallery} MB로 배포됩니다.`,
+        `AOT 빌드의 결과물은 Hello World 창 ${hello} MB, 전체 컨트롤 갤러리 ${gallery} MB입니다.`,
     },
     markup: {
       title: "XAML 없는 C# 마크업",
-      body: "순수 C#의 fluent API로 UI 트리를 구성합니다. 코드 작성 편의를 위한 분석기와 포매터가 제공되고, 창 프리뷰는 주요 IDE에서 동작합니다.",
+      body: "순수 C#의 Fluent API로 UI 트리를 구성합니다. 코드 작성 편의를 위한 분석기와 포매터가 제공되고, 창 프리뷰는 주요 IDE에서 동작합니다.",
     },
     targets: {
       title: "하나의 코드베이스, 네 개의 대상",
@@ -104,12 +104,12 @@ export const ko: Copy = {
 
   code: {
     title: "앱 전체가 C#입니다",
-    lede: "컨트롤은 fluent API로 구성합니다. 창 뒤에 마크업 파일도, 디자이너도, 생성된 partial 클래스도 없습니다.",
+    lede: "컨트롤은 Fluent API로 구성합니다. 창 뒤에 마크업 파일도, 디자이너도, 생성된 partial 클래스도 없습니다.",
   },
 
   binding: {
     title: "리플렉션 없는 바인딩",
-    lede: "소스는 observable 값, 평범한 INotifyPropertyChanged 뷰 모델, 또는 다른 요소의 속성입니다. 점으로 이어진 경로는 컴파일 시점에 단계별 구독으로 분해되므로 트리밍과 AOT가 그대로 동작합니다.",
+    lede: "소스는 Observable 값, 평범한 INotifyPropertyChanged 뷰 모델, 또는 다른 요소의 속성입니다. 점으로 이어진 경로는 컴파일 시점에 단계별 구독으로 분해되므로 트리밍과 AOT가 그대로 동작합니다.",
   },
 
   tooling: {
@@ -117,7 +117,7 @@ export const ko: Copy = {
     lede: "코드 우선이라고 해서 눈을 감고 만드는 것은 아닙니다. 프리뷰가 에디터 안에 창을 그리고, 실행 중인 앱이 편집을 그대로 받습니다.",
     preview: {
       name: "에디터 프리뷰",
-      body: "앱을 실행하지 않고 Window나 UserControl을 에디터 패널에 렌더합니다. 세션을 시작할 때 한 번 빌드하고, 이후 저장할 때마다 다시 그립니다.",
+      body: "앱을 실행하지 않고 Window나 UserControl을 에디터 패널에 렌더합니다. Visual Studio, VS Code, Rider를 지원합니다. 세션을 시작할 때 한 번 빌드하고, 이후 저장할 때마다 다시 그립니다.",
     },
     hotReload: {
       name: "핫 리로드",
@@ -129,7 +129,7 @@ export const ko: Copy = {
     },
     analyzers: {
       name: "분석기",
-      body: "fluent 마크업을 위한 Roslyn 분석기와 리팩터링입니다. 객체 초기화자를 체인으로 바꾸고, 체인을 펼치거나 접고, 문장을 체인으로 병합합니다. 빌드 시점에만 동작하므로 배포 산출물에는 아무것도 들어가지 않습니다.",
+      body: "Fluent 마크업을 위한 Roslyn 분석기와 리팩터링입니다. 객체 초기화자를 체인으로 바꾸고, 체인을 펼치거나 접고, 문장을 체인으로 병합합니다. 빌드 시점에만 동작하므로 배포 산출물에는 아무것도 들어가지 않습니다.",
     },
   },
 
@@ -143,7 +143,7 @@ export const ko: Copy = {
     },
     markup: {
       title: "마크업 API",
-      body: "fluent 표면 전체. 없는 메서드를 지어내는 대신 컴파일되는 코드를 생성합니다.",
+      body: "Fluent 표면 전체. 없는 메서드를 지어내는 대신 컴파일되는 코드를 생성합니다.",
     },
     verify: {
       title: "빌드와 검증",
@@ -152,7 +152,7 @@ export const ko: Copy = {
   },
 
   controls: {
-    title: "기대하는 컨트롤은 기본 제공",
+    title: "기본 제공 컨트롤",
     lede: "버튼, 텍스트 입력, 리스트, 트리, 그리드, 탭, 메뉴, 툴바, 피커, 내비게이션, 그리고 이들을 배치할 패널이 있습니다. Gallery 샘플이 전부를 다루며, 설치 없이 브라우저에서 실행됩니다.",
     openGallery: "Gallery 열기",
     samples: "샘플 둘러보기",
