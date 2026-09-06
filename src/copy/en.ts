@@ -84,7 +84,7 @@ export const en = {
     },
     markup: {
       title: "C# markup, no XAML",
-      body: "Build the UI tree with a fluent API in plain C#. A live preview shows the window as you write it, and refactorings keep the chains readable.",
+      body: "Build the UI tree with a fluent API in plain C#. Analyzers and a formatter help you write it, and the window preview runs in the major IDEs.",
     },
     targets: {
       title: "One codebase, four targets",

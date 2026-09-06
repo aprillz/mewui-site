@@ -84,7 +84,7 @@ export const ko: Copy = {
     },
     markup: {
       title: "XAML 없는 C# 마크업",
-      body: "순수 C#의 fluent API로 UI 트리를 구성합니다. 작성하는 대로 창을 보여주는 프리뷰가 있고, 리팩터링이 체인을 읽기 좋게 유지해 줍니다.",
+      body: "순수 C#의 fluent API로 UI 트리를 구성합니다. 코드 작성 편의를 위한 분석기와 포매터가 제공되고, 창 프리뷰는 주요 IDE에서 동작합니다.",
     },
     targets: {
       title: "하나의 코드베이스, 네 개의 대상",
