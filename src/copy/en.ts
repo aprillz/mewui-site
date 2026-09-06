@@ -75,7 +75,7 @@ export const en = {
     lede: "The framework optimizes for one thing: a small, self contained desktop app that starts fast.",
     aot: {
       title: "NativeAOT and trimming first",
-      body: "Explicit code with no reflection, so trimming works. Publish one native executable that runs with no .NET runtime installed.",
+      body: "Explicit code with no reflection, so NativeAOT publishes it as one native executable that runs with no .NET runtime installed.",
     },
     small: {
       title: "Small by design",
@@ -109,7 +109,7 @@ export const en = {
 
   binding: {
     title: "Bindings without reflection",
-    lede: "A source is an observable value, an ordinary INotifyPropertyChanged view model, or another element's property. Dotted paths are decomposed into per step subscriptions at compile time, so trimming and AOT keep working.",
+    lede: "A source is an observable value, an INotifyPropertyChanged view model, or another element's property, and nested paths work too. Paths are resolved at compile time, so trimming and AOT keep working.",
   },
 
   tooling: {
