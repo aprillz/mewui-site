@@ -3,6 +3,7 @@ export const links = {
   gallery: "https://aprillz.github.io/MewUI/Gallery/",
   nuget: "https://www.nuget.org/packages/Aprillz.MewUI/",
   docs: "https://github.com/aprillz/MewUI/tree/main/docs",
+  skill: "https://github.com/aprillz/mewui-skill",
 };
 
 export const base = import.meta.env.BASE_URL.replace(/\/$/, "");
