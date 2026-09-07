@@ -53,6 +53,25 @@ const { command } = Astro.props;
     color: var(--code-fg);
     font-size: 0.9rem;
     line-height: 2.2;
+    scrollbar-width: thin;
+    scrollbar-color: #ffffff40 transparent;
+  }
+
+  pre::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  pre::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  pre::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: #ffffff33;
+  }
+
+  pre::-webkit-scrollbar-thumb:hover {
+    background: #ffffff59;
   }
 
   button {

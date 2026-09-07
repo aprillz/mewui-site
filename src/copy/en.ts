@@ -94,8 +94,9 @@ export const en = {
 
   size: {
     title: "Deployment size",
-    lede: "Every number here is the main executable of a NativeAOT publish, measured by the repository's own size tooling. Binary units, so 1 MB is 1024 KB.",
-    helloCaption: (platformBackend: string) => `Hello World, ${platformBackend}`,
+    lede: (platformBackend: string) =>
+      `The main executable of a NativeAOT publish. The two figures below are ${platformBackend}.`,
+    helloCaption: "Hello World",
     galleryCaption: "Gallery, the full control showcase",
     columnPlatform: "Platform / backend",
     columnHello: "Hello World",
@@ -125,11 +126,11 @@ export const en = {
     },
     devTools: {
       name: "DevTools",
-      body: "An element inspector, a visual tree window, a frame statistics overlay and a profiler timeline. On by default in Debug, off in Release.",
+      body: "Look into the running app: its visual tree and the properties of any element, in a window beside it. A frame statistics overlay and a profiler timeline come with it.",
     },
     analyzers: {
       name: "Analyzers",
-      body: "Roslyn analyzers and refactorings for fluent markup: turn an object initializer into a chain, expand or collapse one, merge statements into it. Build time only, so nothing reaches the published output.",
+      body: "Roslyn analyzers and refactorings for fluent markup: turn an object initializer into a chain, expand or collapse one, merge statements into it.",
     },
   },
 

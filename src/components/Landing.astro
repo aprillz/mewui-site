@@ -31,6 +31,12 @@ const smallestHello = helloRows.reduce((a, b) =>
   a.executableBytes <= b.executableBytes ? a : b,
 );
 
+// The two headline figures quote the same platform, so the basis stated above
+// them is true for both.
+const basis = smallestHello.platformBackend;
+const headlineGallery =
+  galleryRows.find((row) => row.platformBackend === basis) ?? galleryRows[0];
+
 const targets = [
   { icon: "windows", ...copy.targets.windows },
   { icon: "linux", ...copy.targets.linux },
@@ -45,7 +51,7 @@ const highlights = [
     title: copy.why.small.title,
     body: copy.why.small.body(
       mb(smallestHello.executableBytes),
-      mb(galleryRows[0].executableBytes),
+      mb(headlineGallery.executableBytes),
     ),
   },
   { icon: "brackets", ...copy.why.markup },
@@ -323,14 +329,14 @@ const CODE_THEME = await loadCodeTheme();
   <section id="size" class="split">
     <div>
       <h2>{copy.size.title}</h2>
-      <p class="lede">{copy.size.lede}</p>
+      <p class="lede">{copy.size.lede(basis)}</p>
       <div class="size-headline">
         <div>
           <strong>{mb(smallestHello.executableBytes)}<span> MB</span></strong>
-          <p>{copy.size.helloCaption(smallestHello.platformBackend)}</p>
+          <p>{copy.size.helloCaption}</p>
         </div>
         <div>
-          <strong>{mb(galleryRows[0].executableBytes)}<span> MB</span></strong>
+          <strong>{mb(headlineGallery.executableBytes)}<span> MB</span></strong>
           <p>{copy.size.galleryCaption}</p>
         </div>
       </div>
@@ -1139,6 +1145,14 @@ const CODE_THEME = await loadCodeTheme();
     border-bottom: none;
   }
 
+  /* Figures line up on their last digit, so the sizes are comparable at a
+     glance down the column. */
+  #size th:not(:first-child),
+  #size td:not(:first-child) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
   .control-table {
     margin-bottom: 1.5rem;
   }
@@ -1169,10 +1183,15 @@ const CODE_THEME = await loadCodeTheme();
     font-size: 0.9rem;
   }
 
+  /* The scrollbar sits at the very bottom of the pre, where the rounded
+     corners would clip its ends, so the card insets it by a few pixels and
+     carries the code background itself to keep the block looking solid. */
   .code-card {
     border: 1px solid var(--line);
     border-radius: var(--radius);
     overflow: hidden;
+    padding-bottom: 0.4rem;
+    background: var(--code-bg);
   }
 
   .code-card :global(pre) {
@@ -1181,6 +1200,25 @@ const CODE_THEME = await loadCodeTheme();
     font-size: 0.86rem;
     line-height: 1.7;
     overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #ffffff40 transparent;
+  }
+
+  .code-card :global(pre)::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .code-card :global(pre)::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .code-card :global(pre)::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: #ffffff33;
+  }
+
+  .code-card :global(pre)::-webkit-scrollbar-thumb:hover {
+    background: #ffffff59;
   }
 
   .notice {

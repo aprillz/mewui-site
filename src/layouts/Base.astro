@@ -179,6 +179,11 @@ const countUrl = import.meta.env.PUBLIC_COUNT_URL;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    /* Browsers break Korean between any two characters by default, which cuts
+       words in half. keep-all breaks at spaces instead, and break-word keeps a
+       long unbroken token from pushing the line out. */
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 
   a {

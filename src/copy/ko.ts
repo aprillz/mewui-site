@@ -77,7 +77,7 @@ export const ko: Copy = {
       body: "리플렉션 없는 명시적인 코드라 NativeAOT로 빌드해 .NET 런타임 없이 실행되는 실행 파일 하나로 배포합니다.",
     },
     small: {
-      title: "처음부터 작게",
+      title: "설계부터 작게",
       body: (hello: string, gallery: string) =>
         `AOT 빌드의 결과물은 Hello World 창 ${hello} MB, 전체 컨트롤 갤러리 ${gallery} MB입니다.`,
     },
@@ -93,8 +93,9 @@ export const ko: Copy = {
 
   size: {
     title: "배포 크기",
-    lede: "NativeAOT로 퍼블리시한 주 실행 파일의 크기이며, 저장소에 있는 측정 도구로 잰 값입니다. 1 MB = 1024 KB 기준입니다.",
-    helloCaption: (platformBackend: string) => `Hello World, ${platformBackend}`,
+    lede: (platformBackend: string) =>
+      `NativeAOT로 퍼블리시한 주 실행 파일의 크기입니다. 아래 두 수치는 ${platformBackend} 기준입니다.`,
+    helloCaption: "Hello World",
     galleryCaption: "Gallery (전체 컨트롤 쇼케이스)",
     columnPlatform: "플랫폼 / 백엔드",
     columnHello: "Hello World",
@@ -124,11 +125,11 @@ export const ko: Copy = {
     },
     devTools: {
       name: "DevTools",
-      body: "요소 인스펙터, 비주얼 트리 창, 프레임 통계 오버레이, 프로파일러 타임라인을 제공합니다. Debug 빌드에서는 기본으로 켜지고 Release에서는 꺼집니다.",
+      body: "실행 중인 앱의 비주얼 트리와 요소 속성을 창에서 그대로 들여다봅니다. 프레임 통계 오버레이와 프로파일러 타임라인도 함께 제공합니다.",
     },
     analyzers: {
       name: "분석기",
-      body: "Fluent 마크업용 Roslyn 분석기와 리팩터링입니다. 객체 초기화자를 체인으로 바꾸거나, 체인을 펼치고 접거나, 여러 문장을 체인 하나로 합칩니다. 빌드 때만 동작하므로 배포 결과물에는 들어가지 않습니다.",
+      body: "Fluent 마크업용 Roslyn 분석기와 리팩터링입니다. 객체 초기화자를 체인으로 바꾸거나, 체인을 펼치고 접거나, 여러 문장을 체인 하나로 합칩니다.",
     },
   },
 
@@ -176,7 +177,7 @@ export const ko: Copy = {
     mewDock:
       "Visual Studio 스타일 도킹. 문서·도구 탭, 드래그로 재배치, 분할, 자동 숨김, 팝아웃.",
     svg: "순수 C#으로 구현한 SVG 파싱·렌더링. System.Drawing 없이 동작하며 AOT와 호환됩니다.",
-    skia: "SkiaSharp로 그리는 SkiaCanvasView. 렌더링 백엔드와 GPU 텍스처를 직접 주고받아 빠르게 동작합니다.",
+    skia: "SkiaSharp으로 그리는 SkiaCanvasView. 렌더링 백엔드와 GPU 텍스처를 직접 주고받아 빠르게 동작합니다.",
     mewCharts:
       "LiveChartsCore 엔진 기반의 직교·파이·폴라 차트. SkiaSharp에 의존하지 않습니다.",
     webView2:
