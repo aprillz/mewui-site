@@ -31,10 +31,12 @@ const localeHref = (path: string) => `${base}${path}`;
     <link rel="alternate" hreflang="x-default" href={new URL(localeHref("/"), Astro.site)} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
     />
+
   </head>
   <body>
     <header class="site-header">
@@ -103,19 +105,43 @@ const localeHref = (path: string) => `${base}${path}`;
       "JetBrains Mono", ui-monospace, "Cascadia Code", "Consolas", monospace;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #1e1e1e;
-      --bg-soft: #1a1a1b;
-      --fg: #e6e6e8;
-      --muted: #a3a3aa;
-      --accent: #9e65e8;
-      --accent-strong: #ae7cf0;
-      --accent-soft: #271c3a;
-      --line: #303032;
-      --code-bg: #1e1e1e;
-      --code-fg: #e8e8e8;
-    }
+  /* Paperlogy, SIL Open Font License. Only the Korean page references this
+     family, so the files download there and nowhere else. */
+  @font-face {
+    font-family: "Paperlogy";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy-4Regular.woff2")
+      format("woff2");
+  }
+
+  @font-face {
+    font-family: "Paperlogy";
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url("https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy-6SemiBold.woff2")
+      format("woff2");
+  }
+
+  @font-face {
+    font-family: "Paperlogy";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy-7Bold.woff2")
+      format("woff2");
+  }
+
+  /* Inter and Space Grotesk carry no Hangul, so the Korean page leads with
+     the Korean face and takes its Latin from the same family. */
+  :root:lang(ko) {
+    --korean-face: "Paperlogy";
+    --font-sans:
+      var(--korean-face), "Inter", system-ui, -apple-system, "Malgun Gothic",
+      sans-serif;
+    --font-display: var(--korean-face), var(--font-sans);
   }
 
   * {
