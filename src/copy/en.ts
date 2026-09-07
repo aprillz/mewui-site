@@ -53,8 +53,8 @@ export const en = {
   },
 
   try: {
-    title: "Try it before you install anything",
-    lede: "Three ways in, ordered by what they ask of you.",
+    title: "Getting started",
+    lede: "Open it in the browser, run one command, or add the package to a project. Ordered by what each one asks of you.",
     browser: {
       title: "In your browser",
       body: "Nothing to install. The Gallery sample is the same code compiled to WebAssembly.",
