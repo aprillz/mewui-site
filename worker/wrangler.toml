@@ -1,0 +1,13 @@
+name = "mewui-site-counter"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+account_id = "38e168b917f7d68e59bf1616a0729205"
+
+# database_id is filled in by `wrangler d1 create mewui-site-visits`.
+[[d1_databases]]
+binding = "DB"
+database_name = "mewui-site-visits"
+database_id = "8448d8ff-f143-4592-b717-f19e34ac6ce9"
+
+[observability]
+enabled = true

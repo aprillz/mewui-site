@@ -17,6 +17,7 @@ concurrency:
 env:
   PUBLIC_SITE_URL: https://mewui.aprillz.net
   PUBLIC_SITE_BASE: /
+  PUBLIC_COUNT_URL: https://mewui-site-counter.aprillz.workers.dev
 
 jobs:
   build:

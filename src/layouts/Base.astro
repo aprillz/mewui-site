@@ -10,6 +10,10 @@ interface Props {
 const { copy } = Astro.props;
 const { title, description } = copy;
 const localeHref = (path: string) => `${base}${path}`;
+
+// Unset until the counter worker is deployed, which keeps the beacon out of the
+// built pages entirely.
+const countUrl = import.meta.env.PUBLIC_COUNT_URL;
 ---
 
 <html lang={copy.lang}>
@@ -78,6 +82,23 @@ const localeHref = (path: string) => `${base}${path}`;
       </div>
       <p class="muted small">{copy.footer.version(upstream.publishedVersion)}</p>
     </footer>
+    {
+      countUrl && (
+        <script is:inline define:vars={{ countUrl }}>
+          // Fire and forget. The page never reads the result, so an unreachable
+          // counter changes nothing a visitor can see.
+          try {
+            fetch(countUrl + "/hit", {
+              method: "POST",
+              headers: { "content-type": "text/plain" },
+              body: location.pathname,
+              keepalive: true,
+              mode: "cors",
+            }).catch(() => {});
+          } catch {}
+        </script>
+      )
+    }
   </body>
 </html>
 
