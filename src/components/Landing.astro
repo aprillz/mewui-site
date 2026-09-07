@@ -637,7 +637,7 @@ const CODE_THEME = await loadCodeTheme();
     max-width: 42rem;
     margin: 0 auto 2rem;
     color: var(--muted);
-    font-size: 1.08rem;
+    font-size: 1.15rem;
   }
 
   .hero .actions {
@@ -808,10 +808,12 @@ const CODE_THEME = await loadCodeTheme();
 
   /* The frame takes its width from the capture ratio, so the overlay stays
      aligned with the base image at any viewport height. */
+  /* Shows the top 80 percent of the capture, so the enlarged view reveals
+     most of the window without shrinking it to fit. */
   .frame.tall {
-    height: min(86vh, 1903px);
+    height: min(86vh, 1522px);
     width: auto;
-    aspect-ratio: 1619 / 1903;
+    aspect-ratio: 1619 / 1522;
     max-width: 94vw;
     cursor: col-resize;
   }
@@ -918,13 +920,13 @@ const CODE_THEME = await loadCodeTheme();
 
   .targets strong {
     display: block;
-    font-size: 0.92rem;
+    font-size: 0.98rem;
     line-height: 1.3;
   }
 
   .targets span {
     color: var(--muted);
-    font-size: 0.78rem;
+    font-size: 0.84rem;
   }
 
   /* Uno style alternating columns: the claim on one side, the evidence on the
@@ -1006,12 +1008,12 @@ const CODE_THEME = await loadCodeTheme();
 
   .rung h3 {
     margin: 0 0 0.3rem;
-    font-size: 1.05rem;
+    font-size: 1.1rem;
   }
 
   .rung p {
     margin: 0;
-    font-size: 0.93rem;
+    font-size: 1rem;
   }
 
   .cards {
@@ -1036,13 +1038,13 @@ const CODE_THEME = await loadCodeTheme();
 
   .card h3 {
     margin: 0 0 0.5rem;
-    font-size: 1.05rem;
+    font-size: 1.1rem;
   }
 
   .card p {
     margin: 0;
     color: var(--muted);
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .feature-list {
@@ -1065,12 +1067,12 @@ const CODE_THEME = await loadCodeTheme();
 
   .feature-list h3 {
     margin: 0.15rem 0 0.25rem;
-    font-size: 1.02rem;
+    font-size: 1.08rem;
   }
 
   .feature-list p {
     margin: 0;
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .size-headline {
@@ -1102,7 +1104,7 @@ const CODE_THEME = await loadCodeTheme();
   .size-headline p {
     margin: 0.35rem 0 0;
     color: var(--muted);
-    font-size: 0.9rem;
+    font-size: 0.96rem;
   }
 
   .table-scroll {
@@ -1114,7 +1116,7 @@ const CODE_THEME = await loadCodeTheme();
   table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   th,
@@ -1148,7 +1150,7 @@ const CODE_THEME = await loadCodeTheme();
     border-right: 1px solid var(--line);
     text-transform: none;
     letter-spacing: 0;
-    font-size: 0.9rem;
+    font-size: 0.98rem;
     color: var(--fg);
   }
 
@@ -1164,7 +1166,7 @@ const CODE_THEME = await loadCodeTheme();
     border: 1px solid var(--line);
     border-radius: 6px;
     background: var(--bg-soft);
-    font-size: 0.82rem;
+    font-size: 0.9rem;
   }
 
   .code-card {
@@ -1215,7 +1217,7 @@ const CODE_THEME = await loadCodeTheme();
     border-radius: 9px;
     color: inherit;
     text-decoration: none;
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .doc-links a:hover {

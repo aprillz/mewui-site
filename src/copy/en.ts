@@ -40,7 +40,7 @@ export const en = {
     darkAlt: "The same sample with the dark theme",
     compareLabel: "Move across to compare the light and dark themes",
     caption:
-      "Move across to compare, click to see the whole window. One theme object, switched at runtime.",
+      "Move across to compare, click to see more of the window. One theme object, switched at runtime.",
     dialogLabel: "The Gallery sample in both themes",
     close: "Close",
   },
@@ -71,7 +71,7 @@ export const en = {
   },
 
   why: {
-    title: "Why MewUI",
+    title: "Highlights",
     lede: "The framework optimizes for one thing: a small, self contained desktop app that starts fast.",
     aot: {
       title: "NativeAOT and trimming first",

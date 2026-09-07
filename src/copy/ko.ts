@@ -39,7 +39,7 @@ export const ko: Copy = {
     darkAlt: "같은 샘플의 다크 테마",
     compareLabel: "좌우로 움직여 라이트 테마와 다크 테마 비교",
     caption:
-      "마우스를 좌우로 움직이면 테마가 바뀌고, 클릭하면 창 전체를 볼 수 있습니다. 실행 중에 테마 객체 하나만 바꾼 결과입니다.",
+      "마우스를 좌우로 움직이면 테마가 바뀌고, 클릭하면 더 크게 볼 수 있습니다. 실행 중에 테마 객체 하나만 바꾼 결과입니다.",
     dialogLabel: "두 테마로 본 Gallery 샘플",
     close: "닫기",
   },
@@ -70,7 +70,7 @@ export const ko: Copy = {
   },
 
   why: {
-    title: "MewUI를 쓰는 이유",
+    title: "MewUI의 특징",
     lede: "목표는 하나입니다. 작고, 런타임 설치 없이 실행되며, 빠르게 뜨는 데스크톱 앱입니다.",
     aot: {
       title: "NativeAOT와 트리밍 우선",
