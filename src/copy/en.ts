@@ -27,7 +27,7 @@ export const en = {
     notices: "Third party notices",
     license: "License",
     version: (version: string) =>
-      `Version ${version} on NuGet. In loving memory of April.`,
+      `Version ${version} on NuGet. In loving memory of my April.`,
   },
 
   hero: {

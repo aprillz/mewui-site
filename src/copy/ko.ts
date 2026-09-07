@@ -26,7 +26,7 @@ export const ko: Copy = {
     notices: "서드파티 고지",
     license: "라이선스",
     version: (version: string) =>
-      `NuGet 최신 버전 ${version}. 사랑하는 사월을 기억하며.`,
+      `NuGet 최신 버전 ${version}. 사랑하는 내 사월이를 기억하며.`,
   },
 
   hero: {
