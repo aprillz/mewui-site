@@ -62,7 +62,7 @@ const countUrl = import.meta.env.PUBLIC_COUNT_URL;
     <footer class="site-footer">
       <div class="footer-grid">
         <div>
-          <img class="footer-logo" src={asset("logo.svg")} alt="MewUI" width="32" height="32" />
+          <img class="footer-logo" src={asset("logo_h-480.png")} alt="MewUI" width="480" height="135" />
           <p class="muted">{copy.footer.tagline}</p>
         </div>
         <div>
@@ -319,7 +319,7 @@ const countUrl = import.meta.env.PUBLIC_COUNT_URL;
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--muted);
+    color: var(--fg);
   }
 
   .footer-grid a {
@@ -335,7 +335,9 @@ const countUrl = import.meta.env.PUBLIC_COUNT_URL;
   }
 
   .footer-logo {
-    margin-bottom: 0.75rem;
+    width: auto;
+    height: 2rem;
+    margin-bottom: 0.9rem;
   }
 
   .site-footer > .muted {
