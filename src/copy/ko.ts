@@ -5,9 +5,9 @@ export const ko: Copy = {
   path: "/ko/",
   otherLocaleLabel: "English",
   otherLocalePath: "/",
-  title: "MewUI · 크로스 플랫폼 .NET GUI 프레임워크",
+  title: "MewUI · NativeAOT용 크로스 플랫폼 .NET GUI 프레임워크",
   description:
-    "코드로 UI를 만드는 크로스 플랫폼 .NET GUI 프레임워크입니다. 데스크톱 앱이 몇 MB짜리 네이티브 실행 파일 하나로 나오고, .NET 런타임 없이 실행됩니다.",
+    "MewUI는 C# 코드로 UI를 만드는 크로스 플랫폼 .NET GUI 프레임워크입니다. Windows, Linux, macOS 데스크톱 앱을 몇 MB짜리 NativeAOT 실행 파일 하나로 배포합니다.",
 
   nav: {
     docs: "문서",

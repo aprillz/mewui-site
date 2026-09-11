@@ -9,6 +9,18 @@ interface Props {
 
 const { copy } = Astro.props;
 const { title, description } = copy;
+const ogLocale = copy.lang === "ko" ? "ko_KR" : "en_US";
+const ogLocaleAlternate = copy.lang === "ko" ? "en_US" : "ko_KR";
+
+// Google reads WebSite data on the home page to name the site in results.
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "MewUI",
+  alternateName: "Aprillz.MewUI",
+  url: new URL(`${base}/`, Astro.site).href,
+  inLanguage: copy.lang,
+};
 const localeHref = (path: string) => `${base}${path}`;
 
 // Unset until the counter worker is deployed, which keeps the beacon out of the
@@ -26,8 +38,13 @@ const countUrl = import.meta.env.PUBLIC_COUNT_URL;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MewUI" />
+    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={ogLocaleAlternate} />
     <meta property="og:image" content={new URL(asset("logo_h-1280.webp"), Astro.site)} />
     <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     <link rel="icon" href={asset("logo.svg")} type="image/svg+xml" />
     <link rel="canonical" href={Astro.url.href} />
     <link rel="alternate" hreflang="en" href={new URL(localeHref("/"), Astro.site)} />

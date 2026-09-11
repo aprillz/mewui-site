@@ -5,9 +5,9 @@ export const en = {
   path: "/",
   otherLocaleLabel: "한국어",
   otherLocalePath: "/ko/",
-  title: "MewUI · Cross-platform .NET GUI framework",
+  title: "MewUI · Cross-platform .NET GUI framework for NativeAOT",
   description:
-    "A cross-platform, code-first .NET GUI framework. Desktop apps publish as a single native executable of a few megabytes, with no .NET runtime to install.",
+    "MewUI is a cross-platform, code-first .NET GUI framework in C#. Windows, Linux and macOS apps publish as one NativeAOT executable of a few megabytes.",
 
   nav: {
     docs: "Docs",

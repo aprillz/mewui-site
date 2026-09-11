@@ -168,8 +168,10 @@ const CODE_THEME = await loadCodeTheme();
 
 <Base copy={copy}>
   <section class="hero">
-    <img class="wordmark" src={asset("logo_h-1280.webp")} alt="MewUI" width="420" height="184" />
-    <h1>{copy.hero.headline}</h1>
+    <h1 class="hero-title">
+      <img class="wordmark" src={asset("logo_h-1280.webp")} alt="MewUI" width="420" height="184" />
+      <span class="headline">{copy.hero.headline}</span>
+    </h1>
     <p class="lede">{copy.hero.lede}</p>
     <div class="actions">
       <a class="primary" href={links.gallery}>{copy.hero.demo}</a>
@@ -627,16 +629,23 @@ const CODE_THEME = await loadCodeTheme();
     padding-bottom: 3.5rem;
   }
 
-  .wordmark {
-    width: min(26rem, 84%);
-    height: auto;
-    margin-bottom: 1.5rem;
+  /* The wordmark sits inside the h1 so the heading starts with the name. */
+  .hero-title {
+    margin: 0 0 1rem;
+    font-size: clamp(2rem, 4.6vw, 3rem);
   }
 
-  .hero h1 {
+  .wordmark {
+    display: block;
+    width: min(26rem, 84%);
+    height: auto;
+    margin: 0 auto 1.5rem;
+  }
+
+  .hero-title .headline {
+    display: block;
     max-width: 22ch;
-    margin: 0 auto 1rem;
-    font-size: clamp(2rem, 4.6vw, 3rem);
+    margin: 0 auto;
   }
 
   .hero .lede {
