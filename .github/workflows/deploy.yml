@@ -3,6 +3,10 @@ name: Deploy site
 on:
   push:
     branches: [main]
+  # Stars, downloads and the published version are read at build time, so a
+  # daily rebuild keeps them current without a commit. 06:17 KST.
+  schedule:
+    - cron: "17 21 * * *"
   workflow_dispatch:
 
 permissions:
