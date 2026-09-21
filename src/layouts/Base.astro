@@ -42,7 +42,7 @@ const countUrl = import.meta.env.PUBLIC_COUNT_URL;
     <meta property="og:url" content={Astro.url.href} />
     <meta property="og:locale" content={ogLocale} />
     <meta property="og:locale:alternate" content={ogLocaleAlternate} />
-    <meta property="og:image" content={new URL(asset("logo_h-1280.webp"), Astro.site)} />
+    <meta property="og:image" content={new URL(asset("logo_h-1280.png"), Astro.site)} />
     <meta name="twitter:card" content="summary_large_image" />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     <link rel="icon" href={asset("logo.svg")} type="image/svg+xml" />
@@ -62,7 +62,7 @@ const countUrl = import.meta.env.PUBLIC_COUNT_URL;
   <body>
     <header class="site-header">
       <a class="brand" href={localeHref(copy.path)}>
-        <img src={asset("logo_h-480.png")} alt="MewUI" width="480" height="135" />
+        <img src={asset("logo_h.svg")} alt="MewUI" width="1897" height="632" />
       </a>
       <nav>
         <a href={links.docs}>{copy.nav.docs}</a>
@@ -79,7 +79,7 @@ const countUrl = import.meta.env.PUBLIC_COUNT_URL;
     <footer class="site-footer">
       <div class="footer-grid">
         <div>
-          <img class="footer-logo" src={asset("logo_h-480.png")} alt="MewUI" width="480" height="135" />
+          <img class="footer-logo" src={asset("logo_h.svg")} alt="MewUI" width="1897" height="632" />
           <p class="muted">{copy.footer.tagline}</p>
         </div>
         <div>
@@ -356,10 +356,14 @@ const countUrl = import.meta.env.PUBLIC_COUNT_URL;
     color: var(--accent);
   }
 
+  /* Block so no baseline gap sits under it; the negative margins take back the
+     SVG's own transparent border (58/632 of its height above and below, 69 at
+     the left) so the drawn logo lines up with the text and headings. */
   .footer-logo {
+    display: block;
     width: auto;
-    height: 2rem;
-    margin-bottom: 0.9rem;
+    height: 3rem;
+    margin: -0.28rem 0 0.35rem -0.33rem;
   }
 
   .site-footer > .muted {
