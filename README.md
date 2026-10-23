@@ -18,6 +18,10 @@ npm run dev
 npm run build
 ```
 
+## Documentation under /docs
+
+The documentation site (guides, the C# markup reference and the API reference of the core assembly) is built from the MewUI repository by `scripts/build-docs.sh` and served at https://mewui.aprillz.net/docs/. The workflow checks out `aprillz/MewUI`, builds the core and the `MewUI.MarkupAudit` tool, runs xmldocmd and the Starlight post-processing with `--site-base /docs`, builds `upstream/website` with `PUBLIC_SITE_BASE=/docs`, and copies its `dist` into `dist/docs`. Locally: `scripts/build-docs.sh ../MewUI /docs https://mewui.aprillz.net`, then `npm run build` and copy `../MewUI/website/dist` to `dist/docs`.
+
 ## Deployment
 
 `.github/workflows/deploy.yml` builds on every push to `main` and deploys to

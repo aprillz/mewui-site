@@ -128,21 +128,27 @@ const controlGroups: [string, string[]][] = [
   [copy.controls.groups.panels, upstream.panels],
 ];
 
+// The documentation site is built from the MewUI repository into /docs (scripts/build-docs.sh);
+// a page is the lowercase file stem, and Korean pages live under /docs/ko/.
+const DOCS_BASE = "/docs/";
+const docPage = (file: string) =>
+  `${DOCS_BASE}${copy.lang === "ko" ? "ko/" : ""}${file.replace(/\.md$/, "").toLowerCase()}/`;
+
 const tooling = [
   {
     icon: "eye",
     ...copy.tooling.preview,
-    href: `${links.repo}/blob/main/docs/Preview.md`,
+    href: docPage("Preview.md"),
   },
   {
     icon: "refresh",
     ...copy.tooling.hotReload,
-    href: `${links.repo}/blob/main/docs/HotReload.md`,
+    href: docPage("HotReload.md"),
   },
   {
     icon: "gauge",
     ...copy.tooling.devTools,
-    href: `${links.repo}/blob/main/docs/DevTools.md`,
+    href: docPage("DevTools.md"),
   },
   {
     icon: "wand",
@@ -158,8 +164,6 @@ const agentPoints = [
 ] as const;
 
 // Korean readers get the Korean document of the same topic.
-const docFile = (file: string) =>
-  copy.lang === "ko" ? file.replace(/\.md$/, ".ko.md") : file;
 
 const helloCode = snippet("Program.cs", "hello");
 const bindingCode = snippet("BindingExample.cs", "binding");
@@ -508,7 +512,7 @@ const CODE_THEME = await loadCodeTheme();
     <p class="lede">{copy.docs.lede}</p>
     <div class="doc-links">
       {Object.entries(copy.docs.entries).map(([file, label]) => (
-        <a href={`${links.repo}/blob/main/docs/${docFile(file)}`}>{label}</a>
+        <a href={docPage(file)}>{label}</a>
       ))}
     </div>
   </section>
