@@ -1,7 +1,7 @@
 ---
 import upstream from "../data/upstream.json";
 import type { Copy } from "../copy/en";
-import { links, base, asset } from "../config";
+import { links, base, asset, docsHome } from "../config";
 
 interface Props {
   copy: Copy;
@@ -22,6 +22,7 @@ const structuredData = {
   inLanguage: copy.lang,
 };
 const localeHref = (path: string) => `${base}${path}`;
+const docsHref = docsHome(copy.lang);
 
 // Unset until the counter worker is deployed, which keeps the beacon out of the
 // built pages entirely.
@@ -65,7 +66,7 @@ const countUrl = import.meta.env.PUBLIC_COUNT_URL;
         <img src={asset("logo_h.svg")} alt="MewUI" width="1897" height="632" />
       </a>
       <nav>
-        <a href={links.docs}>{copy.nav.docs}</a>
+        <a href={docsHref}>{copy.nav.docs}</a>
         <a href={links.nuget}>{copy.nav.nuget}</a>
         <a href={links.repo}>{copy.nav.github}</a>
         <a class="locale" href={localeHref(copy.otherLocalePath)}>
@@ -85,7 +86,7 @@ const countUrl = import.meta.env.PUBLIC_COUNT_URL;
         <div>
           <h3>{copy.footer.project}</h3>
           <a href={links.repo}>GitHub</a>
-          <a href={links.docs}>{copy.footer.documentation}</a>
+          <a href={docsHref}>{copy.footer.documentation}</a>
           <a href={links.nuget}>NuGet</a>
           <a href={links.gallery}>{copy.footer.demo}</a>
         </div>
